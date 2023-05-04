@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<executable>
+  <category>Analysis</category>
+  <index>0</index>
+  <title>Density Analysis</title>
+  <description><![CDATA[Perform Density Analysis on an image]]></description>
+  <version>0.1.0.</version>
+  <documentation-url>https://github.com/username/project</documentation-url>
+  <license/>
+  <contributor>Joseph Szatkowski (Washington University in St. Louis)</contributor>
+  <acknowledgements><![CDATA[This work is funded by INSERT GRANT INFO HERE.]]></acknowledgements>
+  <parameters>
+    <image>
+      <name>image</name>
+      <label>Image</label>
+      <channel>input</channel>
+      <index>0</index>
+      <description><![CDATA[The image to be analyzed]]></description>
+      <default>1.0</default>
+    </image>
+    <image type="label" reference ="image">
+      <name>mask</name>
+      <label>Mask</label>
+      <channel>input</channel>
+      <index>1</index>
+      <description><![CDATA[Mask representing the bone area to be analyzed]]></description>
+    </image>
+    <float>
+      <name>voxelSize</name>
+      <label>Voxel Size</label>
+      <channel>input</channel>
+      <index>2</index>
+      <description><![CDATA[The length of 1 voxel side in mm]]></description>
+    </float>
+    <float>
+      <name>slope</name>
+      <label>Slope</label>
+      <channel>input</channel>
+      <index>3</index>
+      <description><![CDATA[The slope for density conversion]]></description>
+    </float>
+    <float>
+      <name>intercept</name>
+      <label>Intercept</label>
+      <channel>input</channel>
+      <index>4</index>
+      <description><![CDATA[The slope intercept for density conversion]]></description>
+    </float>
+    <string>
+      <name>output</name>
+      <label>Output Directory</label>
+      <channel>input</channel>
+      <index>5</index>
+      <description><![CDATA[The directory to output data files to]]></description>
+    </string>
+  </parameters>
+</executable>
