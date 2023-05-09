@@ -159,17 +159,9 @@ class BoneAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservationMixin):
         # Buttons
         self.ui.applyButton.connect('clicked(bool)', self.onApplyButton)
 
-        # Validator
-        numValidator = qt.DoubleValidator()
-
-
         # Make sure parameter node is initialized (needed for module reload)
         self.initializeParameterNode()
-        self.ui.voxelSizeLineEdit.
-        self.ui.scalingLineEdit.
-        self.ui.densitySlopeLineEdit.
-        self.ui.densityInterceptLineEdit.
-        self.ui.waterDensityLineEdit.
+        
         
 
     def cleanup(self):
@@ -371,16 +363,25 @@ class BoneAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservationMixin):
         self._parameterNode.SetParameter("Analysis", str(self.ui.analysisSelector.currentText))
         self._parameterNode.SetParameter("UseAlt", str(self.ui.AlternateDICOMCheckBox.checked))     
         self._parameterNode.SetParameter("UseMan", str(self.ui.ManualDICOMCheckBox.checked)) 
-        self._parameterNode.SetParameter("0018,0050", str(self.ui.voxelSizeLineEdit.text))
-        self._parameterNode.SetParameter("0029,1000", str(self.ui.scalingLineEdit.text))
-        self._parameterNode.SetParameter("0029,1004", str(self.ui.densitySlopeLineEdit.text))
-        self._parameterNode.SetParameter("0029,1005", str(self.ui.densityInterceptLineEdit.text))
-        self._parameterNode.SetParameter("0029,1006", str(self.ui.waterDensityLineEdit.text))
+        self.setNumParameter("0018,0050", str(self.ui.voxelSizeLineEdit.text))
+        self.setNumParameter("0029,1000", str(self.ui.scalingLineEdit.text))
+        self.setNumParameter("0029,1004", str(self.ui.densitySlopeLineEdit.text))
+        self.setNumParameter("0029,1005", str(self.ui.densityInterceptLineEdit.text))
+        self.setNumParameter("0029,1006", str(self.ui.waterDensityLineEdit.text))
         self._parameterNode.SetParameter("OutputDirectory", str(self.ui.outputDirectorySelector.currentPath))
 
         self._parameterNode.EndModify(wasModified)
 
         self.updateGUIFromParameterNode()
+
+    # Sets a parameter to a value if the value can be converted to a float, otherwises sets it to blank
+    def setNumParameter(self, parameter, value):
+        try:
+            float(value)
+            self._parameterNode.SetParameter(parameter, value)
+        except ValueError:
+            self._parameterNode.SetParameter(parameter, "")
+
 
     def onApplyButton(self):
         """
@@ -391,7 +392,7 @@ class BoneAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservationMixin):
             self.logic.process(self._parameterNode.GetNodeReference("InputVolume"), self._parameterNode.GetNodeReference("SegmentNode"), self._parameterNode.GetParameter("BoneSegmentID"), 
                                self.ui.thresholdSelector.lowerThreshold,  self.ui.thresholdSelector.upperThreshold, self.ui.analysisSelector.currentText, 
                                self.ui.AltenateDICOMCheckBox.checkState, self._parameterNode.GetNodeReference("DICOMNode"), self.ui.ManualDICOMCheckBox.checkState, 
-                               [self._parameterNode.GetNodeReference("0018,0050"), self._parameterNode.GetNodeReference("0029,1000"), self._parameterNode.GetNodeReference("0029,1004"), self._parameterNode.GetNodeReference("0029,1005"), self._parameterNode.GetNodeReference("0029,1006")],
+                               {"0018,0050":self._parameterNode.GetNodeReference("0018,0050"), "0029,1000":self._parameterNode.GetNodeReference("0029,1000"), "0029,1004":self._parameterNode.GetNodeReference("0029,1004"), "0029,1005":self._parameterNode.GetNodeReference("0029,1005"), "0029,1006":self._parameterNode.GetNodeReference("0029,1006")},
                                self.ui.outputDirectorySelector.currentPath)
 
             # Compute inverted output (if needed)
@@ -491,11 +492,11 @@ class BoneAnalysisLogic(ScriptedLoadableModuleLogic):
         logging.info(f'Processing completed in {stopTime-startTime:.2f} seconds')
 
     # Used to get dicom metadata from the volume
-    # inputVolume: the volume node
+    # source: the volume node or DICOM dict
     # tag: The DICOM tag number as a string ('####,####')
-    def getDICOMTag(self, inputVolume, tag):
+    def getDICOMTag(self, source, tag):
         shNode = slicer.vtkMRMLSubjectHierarchyNode.GetSubjectHierarchyNode(slicer.mrmlScene)
-        volumeItemId = shNode.GetItemByDataNode(inputVolume)
+        volumeItemId = shNode.GetItemByDataNode(source)
         seriesInstanceUID = shNode.GetItemUID(volumeItemId, 'DICOM')
 
         db = slicer.dicomDatabase
