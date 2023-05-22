@@ -1,9 +1,17 @@
 # Slicer-BoneAnalysis
 Bone Analysis extension for 3D Slicer. Currently Pre-alpha
+
+---How to use---
+Before beginning analysis load a DICOM 3D image using the Add DICOM Data module and create a segment representing the area to analyze using the Segmentations and Segment Editor modules. See the input parameters of the function for more details on what to include in the segment.
+Use the Threshold Selector to select the values for bone and the Output Directory Selector to select a directory. Output files will be created in this directory if they do not already exist, or will be appended to if they do.
+
+---Advanced tab---
+The program requires information from certain DICOM tags to run. Normally it can retrieve that information from the volume node, but if the volume node does not have those tags(i.e, if you are using a copy of the original volume, or your data came from a different format), you can either select a node that does, or enter the values manually.
+
 ---Cortical Analysis---
 Input Parameters:
 Input Volume: A 3d image of the bone.
-Bone Segment: A segmentation of the image containing the cortical bone area. Includes pores, excludes the medullary cavity.
+Bone Segment: A segment of the image containing the cortical bone area. Includes pores, excludes the medullary cavity.
 Threshold: Threshold values representing bone. Used to seperate bone from pores.
 Output Directory: The location to save the output file to. File will be a tsv file named cortical.txt. 
 
@@ -24,7 +32,7 @@ Voxel Dimension: The side length of one voxel, measured in milimeters
 ---Cancellous Analysis---
 Input Parameters:
 Input Volume: A 3d image of the bone.
-Bone Segment: A segmentation of the image containing the cancellous bone area. Includes the medullary cavity, excludes surrounding cotical bone.
+Bone Segment: A segment of the image containing the cancellous bone area. Includes the medullary cavity, excludes surrounding cotical bone.
 Threshold: Threshold values representing bone. Used to seperate bone from cavity.
 Output Directory: The location to save the output file to. File will be a tsv file named cancellous.txt.
 
@@ -69,3 +77,4 @@ Mean Density: The average density of the entire segmented volume
 Standard Deviation of Density: The standard deviation of density of the segmented volume
 Min Density: The minimum density of the segmented volume
 Max Density: The maximum density of the segmented volume
+
