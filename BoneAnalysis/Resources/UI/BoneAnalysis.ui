@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>765</width>
-    <height>577</height>
+    <height>636</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -128,8 +128,11 @@
      <property name="text">
       <string>Advanced</string>
      </property>
-     <property name="collapsed">
+     <property name="checked">
       <bool>false</bool>
+     </property>
+     <property name="collapsed">
+      <bool>true</bool>
      </property>
      <layout class="QFormLayout" name="formLayout_3">
       <item row="1" column="1">
@@ -289,18 +292,18 @@
      <property name="text">
       <string>Outputs</string>
      </property>
-     <attribute name="buttonGroup">
-      <string notr="true">DICOMOptions</string>
-     </attribute>
+     <property name="collapsed">
+      <bool>false</bool>
+     </property>
      <layout class="QFormLayout" name="formLayout_4">
-      <item row="8" column="0">
+      <item row="7" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
          <string>Output Directory:</string>
         </property>
        </widget>
       </item>
-      <item row="8" column="1">
+      <item row="7" column="1">
        <widget class="ctkPathLineEdit" name="outputDirectorySelector">
         <property name="toolTip">
          <string notr="true">Select the directory to put the output files in.</string>
@@ -314,6 +317,16 @@
        </widget>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QProgressBar" name="AnalysisProgress">
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="value">
+      <number>0</number>
+     </property>
     </widget>
    </item>
    <item>

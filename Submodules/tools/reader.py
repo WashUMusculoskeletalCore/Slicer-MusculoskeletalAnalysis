@@ -1,5 +1,10 @@
 import SimpleITK as sitk
-from nrrd import read
+try:
+    from nrrd import read
+except:
+    from slicer.util import pip_install
+    pip_install("pynrrd")
+    from nrrd import read
 
 # Reads an image file as input, returns the image as a numpy array     
 def readImg(inputImg):   

@@ -1,12 +1,12 @@
 import logging
 import os
-
+import time 
 import vtk
+import numbers
 
 import slicer
 from slicer.ScriptedLoadableModule import *
 from slicer.util import VTKObservationMixin
-import qt
 
 
 #
@@ -26,19 +26,20 @@ class BoneAnalysis(ScriptedLoadableModule):
         self.parent.contributors = ["Joseph Szatkowski (Washington University in St. Louis)"]
         # TODO: update with short description of the module and a link to online module documentation
         self.parent.helpText = """
-1. Select a volume containing the image to analyze.\n
-2. Select a segmentation representing the area to analyze. Include the bone and medullary cavity. For cancellous analysis exclude the cortical bone.\n
-3. Use the threshold slider to select a threshold identifying the bone.\n
-4. Select the function to perform. See <a href="https://github.com/WashUMusculoskeletalCore/Washington-University-Musculoskeletal-Image-Analyses">INSERT DOCUMENTATION LINK HERE</a> for more information.\n
-5. Select the directory to send the output files to. If files already exist they will be appended to.\n
-6. Click "Apply"\n
-ADVANCED\n
-7. If the image volume is not the original DICOM, select the original DICOM node to get DICOM tags from.
-"""
+        1. Select a volume containing the image to analyze.\n
+        2. Select a segmentation representing the bone area to analyze. For cortical analysis exclude the medullary cavity. For cancellous analysis exclude the cortical bone.\n
+        3. Use the threshold slider to select a threshold identifying the bone.\n
+        4. Select the function to perform. See <a href="https://github.com/WashUMusculoskeletalCore/Slicer-BoneAnalysis/blob/main/README.md">here</a> for more information.\n
+        5. Select the directory to send the output files to. If files already exist they will be appended to.\n
+        6. Click "Apply"\n
+        ADVANCED\n
+        7. If the image volume is not the original DICOM, select the original DICOM node to get DICOM tags from.
+        """
         # TODO: replace with organization, grant and thanks
         self.parent.acknowledgementText = """
-This file was partially funded by NIH grant INSERT NUMBER HERE.
-"""
+        Developed by the Washington University in St. Louis Musculoskeletal Reseach Center.\n
+        This file was partially funded by NIH grant INSERT NUMBER HERE.
+        """
 
         # Additional initialization step after application startup is complete
         slicer.app.connect("startupCompleted()", registerSampleData)
@@ -61,38 +62,68 @@ def registerSampleData():
     # To ensure that the source code repository remains small (can be downloaded and installed quickly)
     # it is recommended to store data sets that are larger than a few MB in a Github release.
 
-    # BoneAnalysis1
+
     SampleData.SampleDataLogic.registerCustomSampleDataSource(
         # Category and sample name displayed in Sample Data module
         category='BoneAnalysis',
-        sampleName='BoneAnalysis1',
+        sampleName='Cortical1',
         # Thumbnail should have size of approximately 260x280 pixels and stored in Resources/Icons folder.
         # It can be created by Screen Capture module, "Capture all views" option enabled, "Number of images" set to "Single".
         thumbnailFileName=os.path.join(iconsPath, 'BoneAnalysis1.png'),
         # Download URL and target file name
-        uris="https://github.com/Slicer/SlicerTestingData/releases/download/SHA256/998cb522173839c78657f4bc0ea907cea09fd04e44601f17c82ea27927937b95",
-        fileNames='BoneAnalysis1.nrrd',
+        uris="INSERT URL HERE",
+        fileNames='CorticalSample1.nrrd',
         # Checksum to ensure file integrity. Can be computed by this command:
         #  import hashlib; print(hashlib.sha256(open(filename, "rb").read()).hexdigest())
-        checksums='SHA256:998cb522173839c78657f4bc0ea907cea09fd04e44601f17c82ea27927937b95',
+        checksums='INSERT CHECKSUM HERE',
         # This node name will be used when the data set is loaded
-        nodeNames='BoneAnalysis1'
+        nodeNames='Cortical'
     )
 
-    # BoneAnalysis2
     SampleData.SampleDataLogic.registerCustomSampleDataSource(
         # Category and sample name displayed in Sample Data module
         category='BoneAnalysis',
-        sampleName='BoneAnalysis2',
-        thumbnailFileName=os.path.join(iconsPath, 'BoneAnalysis2.png'),
+        sampleName='CorticalMask',
+        # Thumbnail should have size of approximately 260x280 pixels and stored in Resources/Icons folder.
+        # It can be created by Screen Capture module, "Capture all views" option enabled, "Number of images" set to "Single".
+        thumbnailFileName=os.path.join(iconsPath, 'BoneAnalysis1.png'),
         # Download URL and target file name
-        uris="https://github.com/Slicer/SlicerTestingData/releases/download/SHA256/1a64f3f422eb3d1c9b093d1a18da354b13bcf307907c66317e2463ee530b7a97",
-        fileNames='BoneAnalysis2.nrrd',
-        checksums='SHA256:1a64f3f422eb3d1c9b093d1a18da354b13bcf307907c66317e2463ee530b7a97',
+        uris="INSERT URL HERE",
+        fileNames='CorticalMaskSample.seg.nrrd',
+        # Checksum to ensure file integrity. Can be computed by this command:
+        #  import hashlib; print(hashlib.sha256(open(filename, "rb").read()).hexdigest())
+        checksums='INSERT CHECKSUM HERE',
         # This node name will be used when the data set is loaded
-        nodeNames='BoneAnalysis2'
+        nodeNames='CorticalMask'
     )
 
+
+    SampleData.SampleDataLogic.registerCustomSampleDataSource(
+        # Category and sample name displayed in Sample Data module
+        category='BoneAnalysis',
+        sampleName='Cancellous',
+        thumbnailFileName=os.path.join(iconsPath, 'BoneAnalysis2.png'),
+        # Download URL and target file name
+        uris="INSERT URL HERE",
+        fileNames='CancellousSample.nrrd',
+        checksums='INSERT CHECKSUM HERE',
+        # This node name will be used when the data set is loaded
+        nodeNames='Cancellous'
+    )
+
+
+    SampleData.SampleDataLogic.registerCustomSampleDataSource(
+        # Category and sample name displayed in Sample Data module
+        category='BoneAnalysis',
+        sampleName='CancellousMask',
+        thumbnailFileName=os.path.join(iconsPath, 'BoneAnalysis2.png'),
+        # Download URL and target file name
+        uris="INSERT URL HERE",
+        fileNames='CancellousMaskSample.seg.nrrd',
+        checksums='INSERT CHECKSUM HERE',
+        # This node name will be used when the data set is loaded
+        nodeNames='CancellousMask'
+    )
 
 #
 # BoneAnalysisWidget
@@ -159,6 +190,8 @@ class BoneAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservationMixin):
         # Buttons
         self.ui.applyButton.connect('clicked(bool)', self.onApplyButton)
 
+        # Hidden elements
+        self.ui.AnalysisProgress.hide()
         # Make sure parameter node is initialized (needed for module reload)
         self.initializeParameterNode()
         
@@ -227,6 +260,9 @@ class BoneAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservationMixin):
             firstVolumeNode = slicer.mrmlScene.GetFirstNodeByClass("vtkMRMLScalarVolumeNode")
             if firstVolumeNode:
                 self._parameterNode.SetNodeReferenceID("DICOMNode", firstVolumeNode.GetID())
+
+        # Set default state for flags
+        self._parameterNode.SetParameter("Analyzing", "False")
 
         
         
@@ -304,8 +340,10 @@ class BoneAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservationMixin):
         self.ui.densityInterceptLabel.enabled=manual
         self.ui.waterDensityLabel.enabled=manual
         
-
-        if self._parameterNode.GetNodeReference("InputVolume") and self._parameterNode.GetParameter("BoneSegmentID") and (self._parameterNode.GetParameter("UseDICOM")=="False" or self._parameterNode.GetNodeReferenceID("DICOMNode")):
+        if self._parameterNode.GetParameter("Analyzing")=="True":
+            self.ui.applyButton.toolTip = "Currently running analysis"
+            self.ui.applyButton.enabled = False
+        elif self._parameterNode.GetNodeReference("InputVolume") and self._parameterNode.GetParameter("BoneSegmentID") and (self._parameterNode.GetParameter("UseDICOM")=="False" or self._parameterNode.GetNodeReferenceID("DICOMNode")):
             self.ui.applyButton.toolTip = "Perform the selected analysis"
             self.ui.applyButton.enabled = True
         else:
@@ -355,7 +393,7 @@ class BoneAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservationMixin):
         elif caller == 'SegmentNode':
             self._parameterNode.SetNodeReferenceID("SegmentNode", event.GetID())
         elif caller == 'Segment':
-            self._parameterNode.SetParameter("BoneSegmentID", str(event))
+            self._parameterNode.SetParameter("BoneSegmentID", str(event))           
         elif caller == 'DICOM':
             self._parameterNode.SetNodeReferenceID("DICOMNode", event.GetID())
         self._parameterNode.SetParameter("LowerThreshold", str(self.ui.thresholdSelector.lowerThreshold))
@@ -371,7 +409,6 @@ class BoneAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservationMixin):
         self._parameterNode.SetParameter("OutputDirectory", str(self.ui.outputDirectorySelector.currentPath))
 
         self._parameterNode.EndModify(wasModified)
-
         self.updateGUIFromParameterNode()
 
     # Sets a parameter to a value if the value can be converted to a float, otherwises sets it to blank
@@ -390,17 +427,34 @@ class BoneAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservationMixin):
         with slicer.util.tryWithErrorDisplay("Failed to compute results.", waitCursor=True):
             # Compute output
             self.logic.process(self._parameterNode.GetNodeReference("InputVolume"), self._parameterNode.GetNodeReference("SegmentNode"), self._parameterNode.GetParameter("BoneSegmentID"), 
-                               self.ui.thresholdSelector.lowerThreshold,  self.ui.thresholdSelector.upperThreshold, self.ui.analysisSelector.currentText, 
-                               self.ui.AltenateDICOMCheckBox.checkState, self._parameterNode.GetNodeReference("DICOMNode"), self.ui.ManualDICOMCheckBox.checkState, 
-                               {"0018,0050":self._parameterNode.GetNodeReference("0018,0050"), "0029,1000":self._parameterNode.GetNodeReference("0029,1000"), "0029,1004":self._parameterNode.GetNodeReference("0029,1004"), "0029,1005":self._parameterNode.GetNodeReference("0029,1005"), "0029,1006":self._parameterNode.GetNodeReference("0029,1006")},
-                               self.ui.outputDirectorySelector.currentPath)
+                               self.ui.thresholdSelector.lowerThreshold,  self.ui.thresholdSelector.upperThreshold, self.ui.analysisSelector.currentText, self.ui.outputDirectorySelector.currentPath,
+                               self.ui.AlternateDICOMCheckBox.checkState, self._parameterNode.GetNodeReference("DICOMNode"), self.ui.ManualDICOMCheckBox.checkState, 
+                               {"0018,0050":self._parameterNode.GetNodeReference("0018,0050"), "0029,1000":self._parameterNode.GetNodeReference("0029,1000"), "0029,1004":self._parameterNode.GetNodeReference("0029,1004"), "0029,1005":self._parameterNode.GetNodeReference("0029,1005"), "0029,1006":self._parameterNode.GetNodeReference("0029,1006")}, self)        
+        self.updateGUIFromParameterNode()
+            
+            
 
-            # Compute inverted output (if needed)
-            #if self.ui.invertedOutputSelector.currentNode():
-                # If additional output volume is selected then result with inverted threshold is written there
-             #   self.logic.process(self.ui.inputSelector.currentNode(), self.ui.analysisSelector.currentText(),
-             #                      self.ui.outputDirectory.currentPath(), showResult=False)
 
+    def analysisUpdate(self, cliNode, event):
+        if cliNode.GetStatus() & cliNode.Completed:
+            self.ui.AnalysisProgress.setValue(100)
+            self.ui.AnalysisProgress.hide()
+            if cliNode.GetStatus() & cliNode.ErrorsMask:
+                # error
+                errorText = cliNode.GetErrorText()
+                print("CLI execution failed: " + errorText)
+            else:
+                # success
+                print("CLI execution succeeded.")    
+            startTime=float(self._parameterNode.GetParameter("startTime"))
+            stopTime = time.time()
+            logging.info(f'Processing completed in {stopTime-startTime:.2f} seconds')
+            # Clean up temp nodes
+            slicer.mrmlScene.RemoveNode(self._parameterNode.GetNodeReference("labelMap"))          
+            slicer.mrmlScene.RemoveNode(cliNode)
+            self._parameterNode.SetParameter("Analyzing", "False")
+        else:
+            self.ui.AnalysisProgress.setValue(cliNode.GetProgress())
 
 
         
@@ -433,7 +487,7 @@ class BoneAnalysisLogic(ScriptedLoadableModuleLogic):
         if not parameterNode.GetParameter("Analysis"):
             parameterNode.SetParameter("Analysis", "Cortical")
 
-    def process(self, inputVolume, mask, maskLabel, lowerThreshold, upperThreshold, analysis, altDICOM, DICOMNode, manDICOM, DICOMOptions, outputDirectory, showResult=True):
+    def process(self, inputVolume, mask, maskLabel, lowerThreshold, upperThreshold, analysis, outputDirectory, altDICOM=False, DICOMNode=None, manDICOM=False, DICOMOptions=None, source=None, wait=False):
         """
         Run the processing algorithm.
         Can be used without GUI widget.
@@ -446,11 +500,24 @@ class BoneAnalysisLogic(ScriptedLoadableModuleLogic):
         if not inputVolume:
             raise ValueError("Input volume is invalid")
         if not mask or not maskLabel:
-            raise ValueError("Segment is invalid")
+            raise ValueError("Segment is invalid")       
+        if altDICOM and not DICOMNode:
+            raise ValueError("No DICOM source")
+        if manDICOM and not all(DICOMOptions):
+            raise ValueError("Not all DICOM options are selected")
         if not os.access(outputDirectory, os.W_OK):
-            raise ValueError("Output Directory is invalid")
+            if not os.access(outputDirectory, os.F_OK):
+                # If directory doesn't exist try to create it
+                try: 
+                    os.makedirs(outputDirectory)
+                    if not os.access(outputDirectory, os.W_OK):
+                        raise ValueError("Output Directory is invalid")
+                except:
+                    raise ValueError("Output Directory is invalid")
+            else:
+                # If directory is not writable for other reason
+                raise ValueError("Output Directory is invalid")
 
-        import time
         startTime = time.time()
         logging.info('Processing started')
         
@@ -463,9 +530,9 @@ class BoneAnalysisLogic(ScriptedLoadableModuleLogic):
         
 
         # Get DICOM source
-        if altDICOM:
+        if altDICOM and DICOMNode:
             dSource = DICOMNode
-        elif manDICOM:
+        elif manDICOM and DICOMOptions:
             dSource = DICOMOptions
         else:
             dSource = inputVolume
@@ -474,34 +541,44 @@ class BoneAnalysisLogic(ScriptedLoadableModuleLogic):
         slope=float(self.getDICOMTag(dSource, '0029,1006'))*float(self.getDICOMTag(dSource, '0029,1004'))/1000
         intercept=float(self.getDICOMTag(dSource, '0029,1006'))*float(self.getDICOMTag(dSource, '0029,1004'))+float(self.getDICOMTag(dSource, '0029,1005'))
 
-        # Execute the selected function
+        voxelSize = self.getDICOMTag(dSource, '0018,0050')
+
+        # Prepare parameters for the selected function
         if analysis == "Cortical": 
-            parameters = {"image":inputVolume, "mask":labelmap, "lowerThreshold":lowerThreshold, "upperThreshold":upperThreshold, "voxelSize":self.getDICOMTag(dSource, '0018,0050'), "slope":slope, "intercept":intercept, "output":outputDirectory}
-            node = slicer.cli.runSync(slicer.modules.corticalanalysis, None, parameters)
+            parameters = {"image":inputVolume, "mask":labelmap, "lowerThreshold":lowerThreshold, "upperThreshold":upperThreshold, "voxelSize":voxelSize, "slope":slope, "intercept":intercept, "output":outputDirectory}
+            module=slicer.modules.corticalanalysis
         elif analysis == "Cancellous":
-            parameters = {"image":inputVolume, "mask":labelmap, "lowerThreshold":lowerThreshold, "upperThreshold":upperThreshold, "voxelSize":self.getDICOMTag(dSource, '0018,0050'), "slope":slope, "intercept":intercept, "output":outputDirectory}
-            node = slicer.cli.runSync(slicer.modules.cancellousanalysis, None, parameters)
+            parameters = {"image":inputVolume, "mask":labelmap, "lowerThreshold":lowerThreshold, "upperThreshold":upperThreshold, "voxelSize":voxelSize, "slope":slope, "intercept":intercept, "output":outputDirectory}
+            module=slicer.modules.cancellousanalysis
         elif analysis == "Density":
-            parameters = {"image":inputVolume, "mask":labelmap, "voxelSize":self.getDICOMTag(dSource, '0018,0050'), "slope":slope, "intercept":intercept, "output":outputDirectory}
-            node = slicer.cli.runSync(slicer.modules.densityanalysis, None, parameters)
-
-        # Clean up temp nodes
-        slicer.mrmlScene.RemoveNode(labelmap)
-
-        stopTime = time.time()
-        logging.info(f'Processing completed in {stopTime-startTime:.2f} seconds')
+            parameters = {"image":inputVolume, "mask":labelmap, "voxelSize":voxelSize, "slope":slope, "intercept":intercept, "output":outputDirectory}
+            module=slicer.modules.densityanalysis
+        node = slicer.cli.createNode(module, parameters=parameters)
+        # Set up source before running to avoid race conditions
+        if source:
+            source.ui.AnalysisProgress.setValue(0)
+            source.ui.AnalysisProgress.show()
+            source._parameterNode.SetParameter("Analyzing", "True")
+            source._parameterNode.SetNodeReferenceID("labelmapNode", labelmap.GetID())
+            source._parameterNode.SetParameter("startTime", str(startTime))
+            node.AddObserver('ModifiedEvent', source.analysisUpdate)   
+        slicer.cli.run(module=module, node=node, wait_for_completion=wait)   
+        
 
     # Used to get dicom metadata from the volume
     # source: the volume node or DICOM dict
     # tag: The DICOM tag number as a string ('####,####')
     def getDICOMTag(self, source, tag):
-        shNode = slicer.vtkMRMLSubjectHierarchyNode.GetSubjectHierarchyNode(slicer.mrmlScene)
-        volumeItemId = shNode.GetItemByDataNode(source)
-        seriesInstanceUID = shNode.GetItemUID(volumeItemId, 'DICOM')
+        if type(source) is dict:
+            data=source[tag]
+        else:
+            shNode = slicer.vtkMRMLSubjectHierarchyNode.GetSubjectHierarchyNode(slicer.mrmlScene)
+            volumeItemId = shNode.GetItemByDataNode(source)
+            seriesInstanceUID = shNode.GetItemUID(volumeItemId, 'DICOM')
 
-        db = slicer.dicomDatabase
-        instanceList = db.instancesForSeries(seriesInstanceUID)
-        data = db.instanceValue(instanceList[0], tag)
+            db = slicer.dicomDatabase
+            instanceList = db.instancesForSeries(seriesInstanceUID)
+            data = db.instanceValue(instanceList[0], tag)
         return data
 
 
@@ -544,24 +621,60 @@ class BoneAnalysisTest(ScriptedLoadableModuleTest):
         # Get/create input data
 
         import SampleData
-        registerSampleData()
-        inputVolume = SampleData.downloadSample('BoneAnalysis1')
-        outputDirectory = "C:\BoneAnalysisTest"
+        #registerSampleData()
+        #inputVolume = SampleData.downloadSample('Cortical')
+        #mask = SampleData.downloadSample('CorticalMask')
+        inputVolume = slicer.util.loadVolume("C:/Users/szatkowski/Documents/4195_Linear_Attenuation_1-cm_(4195).nrrd")    
+        mask = slicer.util.loadSegmentation("C:/Users/szatkowski/Documents/Segmentation.seg.nrrd")
+        maskLabel = "Segment_1"
+        lowerThreshold = 1643
+        upperThreshold = 7437
+        analysis="Cortical"
+        options = {"0018,0050":0.007996, "0029,1000":4096,"0029,1004":365.712, "0029,1005":-199.725998, "0029,1006":0.4939}
+        outputDirectory = os.path.expanduser("~\\Documents\\BoneAnalysisTest")      
         self.delayDisplay('Loaded test data set')
-
-        inputScalarRange = inputVolume.GetImageData().GetScalarRange()
-        self.assertEqual(inputScalarRange[0], 0)
-        self.assertEqual(inputScalarRange[1], 695)
 
         # Test the module logic
 
         logic = BoneAnalysisLogic()
 
+        
         # Test cortical analysis
-        logic.process(inputVolume, "Cortical", outputDirectory)
+        logic.process(inputVolume, mask, maskLabel, lowerThreshold, upperThreshold, analysis, outputDirectory, manDICOM=True, DICOMOptions=options, wait=True)
+        testFile(os.path.join(outputDirectory, "cortical.txt"), [])
         # Use assert statements here to test output
+        """
+        inputVolume = SampleData.downloadSample('Cancellous')
+        mask = SampleData.downloadSample('CancellousMask')
+        maskLabel = "Segment_1"
+        lowerThreshold = 1234
+        upperThreshold = 5678
+        analysis="Cancellous"      
+        self.delayDisplay('Loaded test data set')
+        # Test cancellous analysis
+        logic.process(inputVolume, mask, maskLabel, lowerThreshold, upperThreshold, analysis, outputDirectory)
 
-        # Test cancelous analysis
-        logic.process(inputVolume, "Cancelous", outputDirectory)
+
+        analysis="Density"
+        self.delayDisplay('Loaded test data set')
+        # Test density analysis
+        logic.process(inputVolume, mask, maskLabel, lowerThreshold, upperThreshold, analysis, outputDirectory)
+        """
 
         self.delayDisplay('Test passed')
+
+
+def testFile(fileName, data):
+    with open(fileName) as f:
+        lines = f.read().splitlines()
+        firstLine = lines[0]
+        lastLine = lines[-1]
+    header = firstLine.split("\t")
+    testData = lastLine.split("\t")
+    assert len(data) == len(testData), "Expected "+ str(len(data)) + " lines, got " + str(len(testData)) + " instead."
+    for i in range(data.length):
+        if isinstance(testData[i], numbers.Number):
+            assert data[i] > testData[i]*.95 and data[i] < testData[i]*1.05, "Value for " + header[i] + ", " + data[i] + " outside of range of expected value " + testData[i] + "."
+        else:
+            assert data[i] == testData[i], "Value for " + header[i] + ", " + data[i] + ", doesn't match expected value " + testData[i] + "."
+        

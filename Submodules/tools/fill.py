@@ -1,4 +1,9 @@
-import skimage.morphology
+try:
+    import skimage.morphology
+except:
+    from slicer.util import pip_install
+    pip_install("scikit-image")
+    import skimage.morphology
 import numpy as np
 
 # Takes a 2D binary numpy array and an integer radius

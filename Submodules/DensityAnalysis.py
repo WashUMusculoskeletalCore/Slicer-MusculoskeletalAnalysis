@@ -17,7 +17,7 @@ import tools.reader as reader
 # output: The name of the output directory
 def main(inputImg, inputMask, voxSize, slope, intercept, output):
     imgData=reader.readImg(inputImg)
-    (maskHeader, maskData) = reader.readMask(inputMask)
+    (_, maskData) = reader.readMask(inputMask)
     (maskData, imgData) = crop(maskData, imgData)
     density = densityMap(imgData, slope, intercept)
 
@@ -27,6 +27,8 @@ def main(inputImg, inputMask, voxSize, slope, intercept, output):
     stdDens = np.zeros(c);
     minDens = np.zeros(c);
     maxDens = np.zeros(c);
+    print("""<filter-progress>{}</filter-progress>""".format(.25))
+    sys.stdout.flush()
     # Get stats for each slice
     for sliceNum in range(c):
         sliceDensity = density[:,:,sliceNum]
@@ -37,11 +39,15 @@ def main(inputImg, inputMask, voxSize, slope, intercept, output):
             stdDens[sliceNum] = np.std(maskDensity)
             minDens[sliceNum] = np.min(maskDensity)
             maxDens[sliceNum] = np.max(maskDensity)
+    print("""<filter-progress>{}</filter-progress>""".format(.50))
+    sys.stdout.flush()
     # Get average area of all slices
     meanArea = np.mean(area)
     stdArea =  np.std(area)
     minArea = np.min(area)
     maxArea = np.max(area)
+    print("""<filter-progress>{}</filter-progress>""".format(.75))
+    sys.stdout.flush()
     # Get average density of entire bone
     fullDensity = density[maskData]
     meanDensity = np.mean(fullDensity)
@@ -52,20 +58,20 @@ def main(inputImg, inputMask, voxSize, slope, intercept, output):
     fPath = os.path.join(output, "density.txt")
 
     header = [
-        'Date Analyzed',
-        'Analysis Path',
-        'Area by slice',
+        'Date Analysis Performed',
+        'File ID',
+        'Area by Slice',
         'Mean Density by Slice',
         'Standard Deviation of Density by Slice',
         'Min Density by Slice',
         'Max Density by Slice',
         'Mean Area',
-        'Standard Deviation of Area', 
+        'Standard Deviation of Area',
         'Min Area',
         'Max Area',
         'Mean Density',
-        'Standard Deviation of Density', 
-        'Min Density', 
+        'Standard Deviation of Density',
+        'Min Density',
         'Max Density'
     ]
     data = [

@@ -1,13 +1,14 @@
 cmake_minimum_required(VERSION 3.16.3...3.19.7 FATAL_ERROR)
 
-project(BoneAnalyisis)
+project(BoneAnalysis)
 
 #-----------------------------------------------------------------------------
 # Extension meta-information
-#set(EXTENSION_HOMEPAGE "https://www.slicer.org/wiki/Documentation/Nightly/Extensions/BoneAnalyisis")
+set(EXTENSION_HOMEPAGE "https://github.com/WashUMusculoskeletalCore/Slicer-BoneAnalysis")
 set(EXTENSION_CATEGORY "Analysis")
-set(EXTENSION_CONTRIBUTORS "Joseph Szatkowski (Washington University in St. Louis)")
-set(EXTENSION_DESCRIPTION "Contains functions for analyzing bone images.")
+set(EXTENSION_CONTRIBUTORS "Joseph Szatkowski ([Musculoskeletal Research Center]Washington University in St. Louis)")
+set(EXTENSION_DESCRIPTION "Analyzes 3D bone images and generates reports.")
+set(EXTENSION_STATUS "Pre-alpha")
 #set(EXTENSION_ICONURL "https://www.example.com/Slicer/Extensions/BoneAnalyisis.png")
 #set(EXTENSION_SCREENSHOTURLS "https://www.example.com/Slicer/Extensions/BoneAnalyisis/Screenshots/1.png")
 set(EXTENSION_DEPENDS "NA") # Specified as a list or "NA" if no dependencies

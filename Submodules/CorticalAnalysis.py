@@ -2,8 +2,6 @@
 
 import sys
 import os
-import SimpleITK as sitk
-from nrrd import read
 import numpy as np
 from datetime import date
 from tools.crop import crop
@@ -17,7 +15,7 @@ from DensityAnalysis import densityMap
 # Performs analysis on cortical bone
 # image: 3D image black and white of bone
 # mask: 3D labelmap of bone area, including cavities
-# lower, upper: The thresholds for bone in the image. Any pixels with a vaule in the range will be considered bone.
+# lower, upper: The thresholds for bone in the image. Any pixels with a value in the range will be considered bone.
 # voxSize: The physical side length of the voxels, in mm 
 # slope, intercept and scale: parameters for density conversion
 # output: The name of the output directory
@@ -25,24 +23,38 @@ def main(inputImg, inputMask, lower, upper, voxSize, slope, intercept, output):
     imgData=reader.readImg(inputImg)
     (_, maskData) = reader.readMask(inputMask)
     (maskData, imgData) = crop(maskData, imgData)
+    if np.count_nonzero(maskData) == 0:
+         raise Exception("Segmentation mask is empty.")
     depth = np.shape(maskData)[2] * voxSize
-    porousBone = (imgData > lower) & (imgData <= upper)
-    boneVolume = np.count_nonzero(porousBone) * voxSize**3
+    boneVolume = np.count_nonzero(maskData) * voxSize**3
     filledMask = np.zeros_like(maskData)
+    print("""<filter-progress>{}</filter-progress>""".format(.20))
+    sys.stdout.flush()
     for sliceNum in range(maskData.shape[2]):
         filledMask[:,:,sliceNum] = fill(maskData[:,:,sliceNum], 5)
     totalVolume = np.count_nonzero(filledMask) * voxSize**3
-    medullarVolume = totalVolume-(np.count_nonzero(maskData) * voxSize**3)
+    medullarVolume = totalVolume-boneVolume
     boneArea = boneVolume/depth
     totalArea = totalVolume/depth
     medullarArea = medullarVolume/depth
-
+    print("""<filter-progress>{}</filter-progress>""".format(.40))
+    sys.stdout.flush()
     # PMOI
-    zDist = np.nonzero(maskData)[2]
-    zCenter = sum(zDist)/len(zDist)
-    pMOI = sum((zDist-zCenter)**2)*voxSize**4
+    ix = np.zeros(maskData.shape[2])
+    iy = np.zeros(maskData.shape[2])
+    for sliceNum in range(maskData.shape[2]):
+        xDist = np.nonzero(maskData[:,:,sliceNum])[0]
+        xCenter = np.mean(xDist)
+        ix[sliceNum] = sum((xDist-xCenter)**2)*voxSize**4
+        yDist = np.nonzero(maskData[:,:,sliceNum])[1]
+        yCenter = np.mean(yDist)
+        iy[sliceNum] = sum((yDist-yCenter)**2)*voxSize**4
+    pMOI = np.mean(ix)+np.mean(iy)
     # Porosity
-    porosity = 1 - np.count_nonzero(porousBone)/np.count_nonzero(maskData)
+    porousBone = (imgData > lower) & (imgData <= upper) & maskData
+    porosity = 1 - (np.count_nonzero(porousBone)/np.count_nonzero(maskData))
+    print("""<filter-progress>{}</filter-progress>""".format(.60))
+    sys.stdout.flush()
     # Thickness
     maskData = largestCC(maskData)
     maskData = findSpheres(maskData)
@@ -50,6 +62,8 @@ def main(inputImg, inputMask, lower, upper, voxSize, slope, intercept, output):
     diams = rads * 2 * voxSize
     thickness = np.mean(diams)
     thicknessStd = np.std(diams)
+    print("""<filter-progress>{}</filter-progress>""".format(.80))
+    sys.stdout.flush()
     # Calculate Density
     density = densityMap(imgData, slope, intercept)
     tmd = np.mean(density)
@@ -67,7 +81,7 @@ def main(inputImg, inputMask, lower, upper, voxSize, slope, intercept, output):
         'Bone Area (mm^2)',
         'Medullary Area (mm^2)',
         'Polar Moment of Interia(mm^4)',
-        'Voxel Dimension (mm^3)'
+        'Voxel Dimension (mm)'
     ]
     data = [
         date.today(),

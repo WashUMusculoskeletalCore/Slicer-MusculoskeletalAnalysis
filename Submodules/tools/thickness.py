@@ -1,8 +1,11 @@
-from scipy.ndimage import distance_transform_edt
-from skimage.feature import peak_local_max
+try:
+    from scipy.ndimage import distance_transform_edt
+except:
+    from slicer.util import pip_install
+    pip_install("scipy")
+    from scipy.ndimage import distance_transform_edt
 import numpy as np
-from itertools import product
-from math import ceil, sqrt
+from math import ceil
 
 # Calculates thickness by finding the largest sphere containing each point
 

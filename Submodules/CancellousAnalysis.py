@@ -4,7 +4,12 @@ import sys
 import os
 from datetime import date
 import numpy as np
-from skimage import measure
+try:
+    from skimage import measure
+except:
+    from slicer.util import pip_install
+    pip_install("scikit-image")
+    from skimage import measure
 from tools.crop import crop
 from tools.thickness import findSpheres
 from tools.writeReport import writeReport
@@ -21,28 +26,30 @@ from DensityAnalysis import densityMap
 # output: The name of the output directory
 def main(inputImg, inputMask, lower, upper, voxSize, slope, intercept, output):
     imgData=reader.readImg(inputImg)
-    (maskHeader, maskData) = reader.readMask(inputMask)
+    (_, maskData) = reader.readMask(inputMask)
     
     (maskData, imgData) = crop(maskData, imgData)
-    depth = imgData.shape[2] * voxSize
     trabecular = (imgData > lower) & (imgData <= upper)
     boneMesh = shape.bWshape(trabecular)
     boneVolume=boneMesh.volume * voxSize**3
     totalVolume = np.count_nonzero(maskData) * voxSize**3
     bvtv = boneVolume/totalVolume
-
+    print("""<filter-progress>{}</filter-progress>""".format(.20))
+    sys.stdout.flush()
     background = np.bitwise_and(maskData, np.invert(trabecular))
     rads = findSpheres(trabecular)
     diams = rads * 2 * voxSize
     thickness = np.mean(diams)
     thicknessStd = np.std(diams)
-
+    print("""<filter-progress>{}</filter-progress>""".format(.40))
+    sys.stdout.flush()
     rads = findSpheres(background)
     diams = rads * 2 * voxSize
     spacing = np.mean(diams)
     spacingStd = np.std(diams)
-
     trabecularNum = 1/spacing
+    print("""<filter-progress>{}</filter-progress>""".format(.60))
+    sys.stdout.flush()
     # SMI
     bS = boneMesh.area*(voxSize**2)
     dr = 0.000001
@@ -51,7 +58,8 @@ def main(inputImg, inputMask, lower, upper, voxSize, slope, intercept, output):
     dS = (boneMesh.area*(voxSize**2))-bS
     dr = dr*voxSize
     SMI=(6*boneVolume*(dS/dr)/(bS**2))
-
+    print("""<filter-progress>{}</filter-progress>""".format(.80))
+    sys.stdout.flush()
     # Calculate density
     density = densityMap(imgData, slope, intercept)
     tmd = np.mean(density[trabecular])
@@ -88,7 +96,7 @@ def main(inputImg, inputMask, lower, upper, voxSize, slope, intercept, output):
         'Structure Model Index',
         'Connectivity Density',
         'Tissue Mineral Density(mgHA/cm^3)',
-        'Voxel Dimension (mm^3)',
+        'Voxel Dimension (mm)',
         'Lower Threshold',
         'Upper Threshold'
     ]

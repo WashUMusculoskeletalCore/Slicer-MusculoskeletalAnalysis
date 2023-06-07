@@ -1,5 +1,15 @@
-from skimage import measure
-from trimesh import base
+try:
+    from skimage import measure
+except:
+    from slicer.util import pip_install
+    pip_install("scikit-image")
+    from skimage import measure
+try:
+    from trimesh import base
+except:
+    from slicer.util import pip_install
+    pip_install("trimesh")
+    from trimesh import base
 
 
 def bWshape(shape):
