@@ -2,11 +2,16 @@
 Bone Analysis extension for 3D Slicer. Currently Pre-alpha
 
 ---How to use---
-Before beginning analysis load a DICOM 3D image using the Add DICOM Data module and create a segment representing the area to analyze using the Segmentations and Segment Editor modules. See the input parameters of the function for more details on what to include in the segment.
-Use the Threshold Selector to select the values for bone and the Output Directory Selector to select a directory. Output files will be created in this directory if they do not already exist, or will be appended to if they do.
+1. Load a DICOM 3D image using the Add DICOM Data module.
+2. Create a segment representing the area to analyze using the Segmentations and Segment Editor modules. See the input parameters of the function for more details on what to include in the segment.
+3. Select which type of analysis you wish to perform.
+4. Use the Threshold Selector to select the values for bone. Used to seperate bone from pores in cortical analysis and spacing in cancellous analysis.
+5. (Optional) Use the Advanced tab if the volume is not loaded from a DICOM.
+6. Use the Output Directory Selector to select a directory. Output files will be created in this directory if they do not already exist, or will be appended to if they do.
 
 ---Advanced tab---
 The program requires information from certain DICOM tags to run. Normally it can retrieve that information from the volume node, but if the volume node does not have those tags(i.e, if you are using a copy of the original volume, or your data came from a different format), you can either select a node that does, or enter the values manually.
+
 
 ---Cortical Analysis---
 Input Parameters:
