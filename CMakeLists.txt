@@ -9,8 +9,9 @@ set(EXTENSION_CATEGORY "Analysis")
 set(EXTENSION_CONTRIBUTORS "Joseph Szatkowski (Washington University in St. Louis)")
 set(EXTENSION_DESCRIPTION "Analyzes 3D musculoskeletal images and generates reports.")
 set(EXTENSION_STATUS "Alpha")
-set(EXTENSION_ICONURL "https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/main/MusculoskeletalAnalysis/Resources/Icons/MusculoskeletalAnalysis.png")
+set(EXTENSION_ICONURL "https://raw.githubusercontent.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/main/MusculoskeletalAnalysis/Resources/Icons/MusculoskeletalAnalysis.png")
 set(EXTENSION_SCREENSHOTURLS "https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/main/MusculoskeletalAnalysis/Resources/Icons/Screenshot.png")
+
 set(EXTENSION_DEPENDS "NA") # Specified as a list or "NA" if no dependencies
 
 #-----------------------------------------------------------------------------
