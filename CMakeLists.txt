@@ -1,16 +1,16 @@
 cmake_minimum_required(VERSION 3.16.3...3.19.7 FATAL_ERROR)
 
-project(BoneAnalysis)
+project(MusculoskeletalAnalysis)
 
 #-----------------------------------------------------------------------------
 # Extension meta-information
-set(EXTENSION_HOMEPAGE "https://github.com/WashUMusculoskeletalCore/Slicer-BoneAnalysis")
+set(EXTENSION_HOMEPAGE "https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis")
 set(EXTENSION_CATEGORY "Analysis")
-set(EXTENSION_CONTRIBUTORS "Joseph Szatkowski ([Musculoskeletal Research Center]Washington University in St. Louis)")
-set(EXTENSION_DESCRIPTION "Analyzes 3D bone images and generates reports.")
-set(EXTENSION_STATUS "Pre-alpha")
-#set(EXTENSION_ICONURL "https://www.example.com/Slicer/Extensions/BoneAnalyisis.png")
-#set(EXTENSION_SCREENSHOTURLS "https://www.example.com/Slicer/Extensions/BoneAnalyisis/Screenshots/1.png")
+set(EXTENSION_CONTRIBUTORS "Joseph Szatkowski (Washington University in St. Louis)")
+set(EXTENSION_DESCRIPTION "Analyzes 3D musculoskeletal images and generates reports.")
+set(EXTENSION_STATUS "Alpha")
+set(EXTENSION_ICONURL "https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/main/MusculoskeletalAnalysis/Resources/Icons/MusculoskeletalAnalysis.png")
+set(EXTENSION_SCREENSHOTURLS "https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/main/MusculoskeletalAnalysis/Resources/Icons/Screenshot.png")
 set(EXTENSION_DEPENDS "NA") # Specified as a list or "NA" if no dependencies
 
 #-----------------------------------------------------------------------------
@@ -21,7 +21,7 @@ include(${Slicer_USE_FILE})
 
 #-----------------------------------------------------------------------------
 # Extension modules
-add_subdirectory(BoneAnalysis)
+add_subdirectory(MusculoskeletalAnalysis)
 add_subdirectory(Submodules)
 ## NEXT_MODULE
 

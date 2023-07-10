@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------------
-set(MODULE_NAME BoneAnalysis)
+set(MODULE_NAME MusculoskeletalAnalysis)
 
 #-----------------------------------------------------------------------------
 set(MODULE_PYTHON_SCRIPTS

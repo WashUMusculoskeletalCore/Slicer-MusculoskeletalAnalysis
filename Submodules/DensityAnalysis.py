@@ -15,10 +15,12 @@ import tools.reader as reader
 # voxSize: The physical side length of the voxels, in mm 
 # slope, intercept and scale: parameters of the equation for converting image values to mgHA/ccm
 # output: The name of the output directory
-def main(inputImg, inputMask, voxSize, slope, intercept, output):
+def main(inputImg, inputMask, voxSize, slope, intercept, name, output):
     imgData=reader.readImg(inputImg)
     (_, maskData) = reader.readMask(inputMask)
     (maskData, imgData) = crop(maskData, imgData)
+    if np.count_nonzero(maskData) == 0:
+         raise Exception("Segmentation mask is empty.")
     density = densityMap(imgData, slope, intercept)
 
     c = density.shape[2]
@@ -59,7 +61,7 @@ def main(inputImg, inputMask, voxSize, slope, intercept, output):
 
     header = [
         'Date Analysis Performed',
-        'File ID',
+        'Input Volume',
         'Area by Slice',
         'Mean Density by Slice',
         'Standard Deviation of Density by Slice',
@@ -76,7 +78,7 @@ def main(inputImg, inputMask, voxSize, slope, intercept, output):
     ]
     data = [
         date.today(),
-        fPath,
+        name,
         area,
         meanDens,
         stdDens,
@@ -99,8 +101,8 @@ def densityMap(img, slope, intercept):
     return img * slope + intercept
 
 if __name__ == "__main__":
-    if len(sys.argv) < 7:
+    if len(sys.argv) < 8:
         print(sys.argv)
-        print("Usage: CancellousAnalysis <input> <mask> <voxelSize> <slope> <intercept> <output>")
+        print("Usage: CancellousAnalysis <input> <mask> <voxelSize> <slope> <intercept> <name> <output>")
         sys.exit(1)
-    main(sys.argv[1], sys.argv[2], float(sys.argv[3]), float(sys.argv[4]), float(sys.argv[5]), str(sys.argv[6]))
+    main(sys.argv[1], sys.argv[2], float(sys.argv[3]), float(sys.argv[4]), float(sys.argv[5]), str(sys.argv[6]), str(sys.argv[7]))
