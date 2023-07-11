@@ -1,5 +1,7 @@
-# Slicer-BoneAnalysis
-Bone Analysis extension for 3D Slicer. Currently Pre-alpha
+# Slicer-MusculoskeletalAnalysis
+Musculoskeletal Analysis extension for 3D Slicer. Currently Alpha
+
+![Alt text](/MusculoskeletalAnalysis/Resources/Icons/Screenshot.png?raw=true)
 
 ---How to use---
 1. Load a DICOM 3D image using the Add DICOM Data module.
