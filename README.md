@@ -3,7 +3,7 @@ Musculoskeletal Analysis extension for 3D Slicer. Currently Alpha
 
 ![Alt text](/MusculoskeletalAnalysis/Resources/Icons/Screenshot.png?raw=true)
 
-### How to use
+## How to use
 1. Load a DICOM 3D image using the Add DICOM Data module.
 2. Create a segment representing the area to analyze using the Segmentations and Segment Editor modules. See the input parameters of the function for more details on what to include in the segment.
 3. Select which type of analysis you wish to perform.
@@ -11,18 +11,18 @@ Musculoskeletal Analysis extension for 3D Slicer. Currently Alpha
 5. (Optional) Use the Advanced tab if the volume is not loaded from a DICOM.
 6. Use the Output Directory Selector to select a directory. Output files will be created in this directory if they do not already exist, or will be appended to if they do.
 
-### Advanced tab
+## Advanced tab
 The program requires information from certain DICOM tags to run. Normally it can retrieve that information from the volume node, but if the volume node does not have those tags(i.e, if you are using a copy of the original volume, or your data came from a different format), you can either select a node that does, or enter the values manually.
 
 
-### Cortical Analysis
-## Input Parameters:
+## Cortical Analysis
+### Input Parameters:
 Input Volume: A 3d image of the bone.
 Bone Segment: A segment of the image containing the cortical bone area. Includes pores, excludes the medullary cavity.
 Threshold: Threshold values representing bone. Used to seperate bone from pores.
 Output Directory: The location to save the output file to. File will be a tsv file named cortical.txt. 
 
-## Output Parameters:
+### Output Parameters:
 Date Analysis Performed: The current date
 File ID: The output filepath
 Mean Cortical Thickness: The mean thickness of the bone, measured by largest sphere thickness, in milimeters.
@@ -36,15 +36,15 @@ Polar Moment of Interia: The moment of intertia around the z-axis, based on the 
 Voxel Dimension: The side length of one voxel, measured in milimeters
 
 
-### Cancellous Analysis
-## Input Parameters:
+## Cancellous Analysis
+### Input Parameters:
 Input Volume: A 3d image of the bone.
 Bone Segment: A segment of the image containing the cancellous bone area. Includes the medullary cavity, excludes surrounding cotical bone.
 Threshold: Threshold values representing bone. Used to seperate bone from cavity.
 Output Directory: The location to save the output file to. File will be a tsv file named cancellous.txt.
 
 
-## Output Parameters:
+### Output Parameters:
 Date Analysis Performed: The current date
 File ID: The output filepath
 Total Volume: The volume of the segmented area
@@ -62,13 +62,13 @@ Voxel Dimension: The side length of one voxel, measured in milimeters
 Lower Threshold: The lower threshold value for bone
 Upper Threshold: The upper threshold value for bone
 
-### Density Analysis
-## Input Parameters:
+## Density Analysis
+### Input Parameters:
 Input Volume: A 3d image of the bone.
 Bone Segment: A segmentation of the image containing the bone area to be measured.
 Output Directory: The location to save the output file to. File will be a tsv file named density.txt.
 
-## Output Parameters:
+### Output Parameters:
 Date Analysis Performed: The current date
 File ID: The output filepath
 Area by Slice: The area of the segment in each slice of each slice
