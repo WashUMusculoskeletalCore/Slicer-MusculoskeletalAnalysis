@@ -3,6 +3,16 @@ Musculoskeletal Analysis extension for 3D Slicer. Currently Alpha
 
 ![Alt text](/MusculoskeletalAnalysis/Resources/Icons/Screenshot.png?raw=true)
 
+## Dependencies
+The following additional python packages are required:
+pynrrd: All analysis
+scikit-image: Cortical Analysis and Cancellous Analysis
+scipy: Cortical Analysis and Cancellous Analysis
+trimesh: Cancellous Analysis
+
+Packages will be installed when the associated analysis functions are run.
+
+
 ## How to use
 1. Load a DICOM 3D image using the Add DICOM Data module.
 2. Create a segment representing the area to analyze using the Segmentations and Segment Editor modules. See the input parameters of the function for more details on what to include in the segment.
