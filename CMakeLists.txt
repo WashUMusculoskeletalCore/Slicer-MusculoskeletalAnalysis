@@ -22,8 +22,8 @@ include(${Slicer_USE_FILE})
 
 #-----------------------------------------------------------------------------
 # Extension modules
-add_subdirectory(MusculoskeletalAnalysis)
-add_subdirectory(Submodules)
+add_subdirectory(Scripted)
+add_subdirectory(CLI)
 ## NEXT_MODULE
 
 #-----------------------------------------------------------------------------
