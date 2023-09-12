@@ -1,10 +1,6 @@
 import SimpleITK as sitk
-try:
-    from nrrd import read
-except:
-    from slicer.util import pip_install
-    pip_install("pynrrd")
-    from nrrd import read
+from nrrd import read
+
 
 # Converts slicer image and segmentation volumes into numpy format
 

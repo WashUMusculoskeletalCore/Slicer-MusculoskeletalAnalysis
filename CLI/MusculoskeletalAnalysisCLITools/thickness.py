@@ -1,9 +1,4 @@
-try:
-    from scipy.ndimage import distance_transform_edt
-except:
-    from slicer.util import pip_install
-    pip_install("scipy")
-    from scipy.ndimage import distance_transform_edt
+from scipy.ndimage import distance_transform_edt
 import numpy as np
 from math import ceil
 

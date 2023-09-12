@@ -1,15 +1,5 @@
-try:
-    from skimage import measure
-except:
-    from slicer.util import pip_install
-    pip_install("scikit-image")
-    from skimage import measure
-try:
-    from trimesh import base
-except:
-    from slicer.util import pip_install
-    pip_install("trimesh")
-    from trimesh import base
+from skimage import measure
+from trimesh import base
 
 # Creates a triangular mesh shape using marching cubes algorithm 
 def bWshape(shape):

@@ -2,6 +2,8 @@ import logging
 import os
 import time 
 import vtk
+import importlib
+import sys
 
 
 import slicer
@@ -629,12 +631,19 @@ class MusculoskeletalAnalysisLogic(ScriptedLoadableModuleLogic):
         if analysis == "Cortical": 
             parameters = {"image":inputVolume, "mask":labelmap, "lowerThreshold":lowerThreshold, "upperThreshold":upperThreshold, "voxelSize":voxelSize, "slope":slope, "intercept":intercept, "inputName":inputVolume.GetName(), "output":outputDirectory}
             module=slicer.modules.corticalanalysis
+            requirements = [('scipy', 'scipy'), ('skimage', 'scikit-image'), ('nrrd', 'pynrrd')]
         elif analysis == "Cancellous":
             parameters = {"image":inputVolume, "mask":labelmap, "lowerThreshold":lowerThreshold, "upperThreshold":upperThreshold, "voxelSize":voxelSize, "slope":slope, "intercept":intercept, "inputName":inputVolume.GetName(), "output":outputDirectory}
             module=slicer.modules.cancellousanalysis
+            requirements = [('scipy', 'scipy'), ('skimage', 'scikit-image'), ('nrrd', 'pynrrd'), ('trimesh', 'trimesh')]
         elif analysis == "Density":
             parameters = {"image":inputVolume, "mask":labelmap, "voxelSize":voxelSize, "slope":slope, "intercept":intercept, "inputName":inputVolume.GetName(), "output":outputDirectory}
             module=slicer.modules.densityanalysis
+            requirements = [('nrrd', 'pynrrd')]
+
+        # Install required python modules
+        self.importRequest(requirements)
+
         node = slicer.cli.createNode(module, parameters=parameters)
         # Set up source before running to avoid race conditions
         if source:
@@ -662,6 +671,23 @@ class MusculoskeletalAnalysisLogic(ScriptedLoadableModuleLogic):
             instanceList = db.instancesForSeries(seriesInstanceUID)
             data = db.instanceValue(instanceList[0], tag)
         return data
+
+    # Check a list of modules to see if they are installed, request permission to install any missing.
+    # requested: A list of tuples in the format (moduleName, pipName)
+    def importRequest(self, requested):
+        missing = []
+        for r in requested:
+            if not importlib.util.find_spec(r[0]):
+                missing.append(r)
+        if len(missing) > 0:
+            names, pips = zip(*missing)
+            if slicer.util.confirmOkCancelDisplay("The following python modules are required: " + ", ".join(names) + ". Do you want to install them?"):
+                for p in pips:
+                    slicer.util.pip_install(p)
+                    #pass
+            else:
+                raise ImportError("Required python modules do not have permission to install")
+
 
 
 #

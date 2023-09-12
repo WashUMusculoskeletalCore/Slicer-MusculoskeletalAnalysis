@@ -4,12 +4,7 @@ import sys
 import os
 from datetime import date
 import numpy as np
-try:
-    from skimage import measure
-except:
-    from slicer.util import pip_install
-    pip_install("scikit-image")
-    from skimage import measure
+from skimage import measure
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from MusculoskeletalAnalysisCLITools.crop import crop
 from MusculoskeletalAnalysisCLITools.thickness import findSpheres
