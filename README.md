@@ -1,7 +1,7 @@
 # Slicer-MusculoskeletalAnalysis
 Musculoskeletal Analysis extension for 3D Slicer. Currently Alpha
 
-![Alt text](/MusculoskeletalAnalysis/Resources/Icons/Screenshot.png?raw=true)
+![Alt text](/Scripted/MusculoskeletalAnalysis/Resources/Icons/Screenshot.png?raw=true)
 
 ## Dependencies
 The following additional python packages are required:<br/>
