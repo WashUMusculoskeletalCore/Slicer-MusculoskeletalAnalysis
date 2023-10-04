@@ -51,7 +51,7 @@
       <item row="3" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>Bone Segment:</string>
+         <string>Analysis Segment:</string>
         </property>
        </widget>
       </item>
@@ -61,7 +61,7 @@
          <bool>true</bool>
         </property>
         <property name="toolTip">
-         <string notr="true">Select the segment representing the bone and medullary cavity.</string>
+         <string notr="true">Select the area to be analyzed.</string>
         </property>
         <property name="noneEnabled">
          <bool>false</bool>
@@ -71,23 +71,6 @@
         </property>
         <property name="segmentationNodeSelectorVisible">
          <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Bone Threshold:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="1">
-       <widget class="qMRMLVolumeThresholdWidget" name="thresholdSelector">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="toolTip">
-         <string notr="true">Select the threshold for bone.</string>
         </property>
        </widget>
       </item>
@@ -118,6 +101,21 @@
           <string>Density</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>Intervertebral</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="5" column="0" colspan="2">
+       <widget class="qMRMLVolumeThresholdWidget" name="thresholdSelector">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="toolTip">
+         <string notr="true">Select the threshold for bone.</string>
+        </property>
        </widget>
       </item>
      </layout>

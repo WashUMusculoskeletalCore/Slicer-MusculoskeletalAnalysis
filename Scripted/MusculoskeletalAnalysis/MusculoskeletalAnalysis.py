@@ -3,8 +3,6 @@ import os
 import time 
 import vtk
 import importlib
-import sys
-
 
 import slicer
 from slicer.ScriptedLoadableModule import *
@@ -29,7 +27,7 @@ class MusculoskeletalAnalysis(ScriptedLoadableModule):
         # TODO: update with short description of the module and a link to online module documentation
         self.parent.helpText = """
         1. Select a volume containing the image to analyze.\n
-        2. Select a segmentation representing the bone area to analyze. For cortical analysis exclude the medullary cavity. For cancellous analysis exclude the cortical bone.\n
+        2. Select a segmentation representing the area to analyze. For cortical analysis exclude the medullary cavity. For cancellous analysis exclude the cortical bone.\n
         3. Use the threshold slider to select a threshold identifying the bone.\n
         4. Select the function to perform. See <a href="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/main/README.md">here</a> for more information.\n
         5. Select the directory to send the output files to. If files already exist they will be appended to.\n
@@ -72,7 +70,7 @@ def registerSampleData():
         # It can be created by Screen Capture module, "Capture all views" option enabled, "Number of images" set to "Single".
         thumbnailFileName=os.path.join(iconsPath, 'Cortical1.png'),
         # Download URL and target file name
-        uris="https://raw.githubusercontent.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/main/SampleData/CorticalSample1.nrrd",
+        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/SampleData/CorticalSample1.nrrd?raw=true",
         fileNames='CorticalSample1.nrrd',
         # Checksum to ensure file integrity. Can be computed by this command:
         #  import hashlib; print(hashlib.sha256(open(filename, "rb").read()).hexdigest())
@@ -90,7 +88,7 @@ def registerSampleData():
         # It can be created by Screen Capture module, "Capture all views" option enabled, "Number of images" set to "Single".
         thumbnailFileName=os.path.join(iconsPath, 'CorticalMask1.png'),
         # Download URL and target file name
-        uris="https://raw.githubusercontent.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/main/SampleData/CorticalMaskSample1.seg.nrrd",
+        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/SampleData/CorticalMaskSample1.seg.nrrd?raw=true",
         fileNames='CorticalMaskSample1.seg.nrrd',
         loadFileType='SegmentationFile',
         # Checksum to ensure file integrity. Can be computed by this command:
@@ -108,7 +106,7 @@ def registerSampleData():
         # It can be created by Screen Capture module, "Capture all views" option enabled, "Number of images" set to "Single".
         thumbnailFileName=os.path.join(iconsPath, 'Cortical2.png'),
         # Download URL and target file name
-        uris="https://raw.githubusercontent.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/main/SampleData/CorticalSample2.nrrd",
+        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/SampleData/CorticalSample2.nrrd?raw=true",
         fileNames='CorticalSample2.nrrd',
         # Checksum to ensure file integrity. Can be computed by this command:
         #  import hashlib; print(hashlib.sha256(open(filename, "rb").read()).hexdigest())
@@ -125,7 +123,7 @@ def registerSampleData():
         # It can be created by Screen Capture module, "Capture all views" option enabled, "Number of images" set to "Single".
         thumbnailFileName=os.path.join(iconsPath, 'CorticalMask2.png'),
         # Download URL and target file name
-        uris="https://raw.githubusercontent.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/main/SampleData/CorticalMaskSample2.seg.nrrd",
+        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/SampleData/CorticalMaskSample2.seg.nrrd?raw=true",
         fileNames='CorticalMaskSample2.seg.nrrd',
         loadFileType='SegmentationFile',
         # Checksum to ensure file integrity. Can be computed by this command:
@@ -141,7 +139,7 @@ def registerSampleData():
         sampleName='Cancellous1',
         thumbnailFileName=os.path.join(iconsPath, 'Cancellous1.png'),
         # Download URL and target file name
-        uris="https://raw.githubusercontent.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/main/SampleData/CancellousSample1.nrrd",
+        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/SampleData/CancellousSample1.nrrd?raw=true",
         fileNames='CancellousSample1.nrrd',
         # Checksum to ensure file integrity. Can be computed by this command:
         #  import hashlib; print(hashlib.sha256(open(filename, "rb").read()).hexdigest())
@@ -157,7 +155,7 @@ def registerSampleData():
         sampleName='CancellousMask1',
         thumbnailFileName=os.path.join(iconsPath, 'CancellousMask1.png'),
         # Download URL and target file name
-        uris="https://raw.githubusercontent.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/main/SampleData/CancellousMaskSample1.seg.nrrd",
+        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/SampleData/CancellousMaskSample1.seg.nrrd?raw=true",
         fileNames='CancellousMaskSample1.seg.nrrd',
         loadFileType='SegmentationFile',
         # Checksum to ensure file integrity. Can be computed by this command:
@@ -173,7 +171,7 @@ def registerSampleData():
         sampleName='Cancellous2',
         thumbnailFileName=os.path.join(iconsPath, 'Cancellous2.png'),
         # Download URL and target file name
-        uris="https://raw.githubusercontent.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/main/SampleData/CancellousSample2.nrrd",
+        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/SampleData/CancellousSample2.nrrd?raw=true",
         fileNames='CancellousSample2.nrrd',
         # Checksum to ensure file integrity. Can be computed by this command:
         #  import hashlib; print(hashlib.sha256(open(filename, "rb").read()).hexdigest())
@@ -189,7 +187,7 @@ def registerSampleData():
         sampleName='CancellousMask2',
         thumbnailFileName=os.path.join(iconsPath, 'CancellousMask2.png'),
         # Download URL and target file name
-        uris="https://raw.githubusercontent.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/main/SampleData/CancellousMaskSample2.seg.nrrd",
+        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/SampleData/CancellousMaskSample2.seg.nrrd?raw=true",
         fileNames='CancellousMaskSample2.seg.nrrd',
         loadFileType='SegmentationFile',
         # Checksum to ensure file integrity. Can be computed by this command:
@@ -197,6 +195,38 @@ def registerSampleData():
         checksums='SHA256:473cb8d1a2ccc8973eb7f0b69eb297d2d4119155b1a9940cb5e11d2ccd4e1315',
         # This node name will be used when the data set is loaded
         nodeNames='CancellousMask2'
+    )
+
+    SampleData.SampleDataLogic.registerCustomSampleDataSource(
+        # Category and sample name displayed in Sample Data module
+        category='MusculoskeletalAnalysis',
+        sampleName='Intervertebral1',
+        thumbnailFileName=os.path.join(iconsPath, 'Intervertebral1.png'),
+        # Download URL and target file name
+        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/SampleData/IntervertebralSample1.nrrd?raw=true",
+        fileNames='Intervertebral1.nrrd',
+        # Checksum to ensure file integrity. Can be computed by this command:
+        #  import hashlib; print(hashlib.sha256(open(filename, "rb").read()).hexdigest())
+        checksums='SHA256:26706cec367bded189182e8b3e02c804bdad5267cee25f95202ee240823841a9',
+        # This node name will be used when the data set is loaded
+        nodeNames='Intervertebral1'
+    )
+
+
+    SampleData.SampleDataLogic.registerCustomSampleDataSource(
+        # Category and sample name displayed in Sample Data module
+        category='MusculoskeletalAnalysis',
+        sampleName='IntervertebralMask1',
+        thumbnailFileName=os.path.join(iconsPath, 'IntervertebralMask1.png'),
+        # Download URL and target file name
+        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/SampleData/IntervertebralMaskSample1.seg.nrrd?raw=true",
+        fileNames='IntervertebralMaskSample1.seg.nrrd',
+        loadFileType='SegmentationFile',
+        # Checksum to ensure file integrity. Can be computed by this command:
+        #  import hashlib; print(hashlib.sha256(open(filename, "rb").read()).hexdigest())
+        checksums='SHA256:7c140faa9924dd47d14df1208d5dc130479a8c64bfba6b741e02362465f7183f',
+        # This node name will be used when the data set is loaded
+        nodeNames='IntervertebralMask1'
     )
     
 #
@@ -250,6 +280,7 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
         self.ui.inputSelector.connect("currentNodeChanged(vtkMRMLNode*)", self.inputVolumeChanged)
         self.ui.segmentSelector.connect("currentNodeChanged(vtkMRMLNode*)",self.segmentNodeChanged)
         self.ui.segmentSelector.connect("currentSegmentChanged(QString)",self.segmentChanged)
+        self.ui.segmentSelector.connect("segmentSelectionChanged(QStringList)", self.segmentChanged)
         self.ui.thresholdSelector.connect("thresholdValuesChanged(double, double)", self.updateParameterNodeFromGUI)
         self.ui.analysisSelector.connect("currentTextChanged(const QString)", self.updateParameterNodeFromGUI)
         self.ui.DICOMOptions.connect("buttonClicked(QAbstractButton*)", self.updateParameterNodeFromGUI)
@@ -268,6 +299,7 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
         self.ui.AnalysisProgress.hide()
         # Make sure parameter node is initialized (needed for module reload)
         self.initializeParameterNode()
+        
         
         
 
@@ -325,10 +357,12 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
             firstSegmentNode = slicer.mrmlScene.GetFirstNodeByClass("vtkMRMLSegmentationNode")
             if firstSegmentNode:
                 self._parameterNode.SetNodeReferenceID("SegmentNode", firstSegmentNode.GetID())
-        if not self._parameterNode.GetParameter("BoneSegmentID"):
+        if not self._parameterNode.GetParameter("SegmentID"):
             if self._parameterNode.GetNodeReference("SegmentNode"):
                 segmentation = self._parameterNode.GetNodeReference("SegmentNode").GetSegmentation()
-                self._parameterNode.SetParameter("BoneSegmentID", segmentation.GetNthSegmentID(0))
+                self._parameterNode.SetParameter("SegmentID", segmentation.GetNthSegmentID(0))
+
+
 
         if not self._parameterNode.GetNodeReference("DICOMNode"):
             firstVolumeNode = slicer.mrmlScene.GetFirstNodeByClass("vtkMRMLScalarVolumeNode")
@@ -377,9 +411,7 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
         self._updatingGUIFromParameterNode = True
 
         # Update node selectors and sliders
-        #self.ui.inputSelector.setCurrentNode(self._parameterNode.GetNodeReference("InputVolume"))
-        #self.ui.segmentSelector.setCurrentNode(self._parameterNode.GetNodeReference("SegmentSelectionNode"))
-        #self.ui.segmentSelector.setCurrentSegmentID(str(self._parameterNode.GetParameter("BoneSegmentID")))
+
         self.ui.thresholdSelector.setMRMLVolumeNode(self._parameterNode.GetNodeReference("InputVolume"))
         if self._parameterNode.GetParameter("LowerThreshold") and self._parameterNode.GetParameter("UpperThreshold"):
             self.ui.thresholdSelector.setLowerThreshold(float(self._parameterNode.GetParameter("LowerThreshold")))
@@ -395,11 +427,22 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
         self.ui.waterDensityLineEdit.setText(self._parameterNode.GetParameter("0029,1006"))
         self.ui.outputDirectorySelector.setCurrentPath(str(self._parameterNode.GetParameter("OutputDirectory")))
 
+
         # Update buttons states and tooltips
         if self._parameterNode.GetNodeReference("InputVolume"):
             self.ui.thresholdSelector.enabled = True
         else:
             self.ui.thresholdSelector.enabled = False
+
+        if self._parameterNode.GetParameter("MultiSelect") == 'True':
+            self.ui.segmentSelector.multiSelection = True
+            self.ui.thresholdSelector.enabled = False
+            self.ui.thresholdSelector.setVisible(False)
+        else:
+            self.ui.segmentSelector.multiSelection = False
+            self.ui.thresholdSelector.enabled = True
+            self.ui.thresholdSelector.setVisible(True)
+
         # Update advanced options
         self.ui.DICOMSelector.enabled = (self._parameterNode.GetParameter("UseAlt")=="True")
         manual = (self._parameterNode.GetParameter("UseMan")=="True")
@@ -417,7 +460,7 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
         if self._parameterNode.GetParameter("Analyzing")=="True":
             self.ui.applyButton.toolTip = "Currently running analysis"
             self.ui.applyButton.enabled = False
-        elif self._parameterNode.GetNodeReference("InputVolume") and self._parameterNode.GetParameter("BoneSegmentID") and (self._parameterNode.GetParameter("UseDICOM")=="False" or self._parameterNode.GetNodeReferenceID("DICOMNode")):
+        elif self._parameterNode.GetNodeReference("InputVolume") and self._parameterNode.GetParameter("SegmentID") and (self._parameterNode.GetParameter("UseDICOM")=="False" or self._parameterNode.GetNodeReferenceID("DICOMNode")):
             self.ui.applyButton.toolTip = "Perform the selected analysis"
             self.ui.applyButton.enabled = True
         else:
@@ -467,7 +510,7 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
         elif caller == 'SegmentNode':
             self._parameterNode.SetNodeReferenceID("SegmentNode", event.GetID())
         elif caller == 'Segment':
-            self._parameterNode.SetParameter("BoneSegmentID", str(event))           
+            self._parameterNode.SetParameter("SegmentID", str(event))           
         elif caller == 'DICOM' and event is not None:
             self._parameterNode.SetNodeReferenceID("DICOMNode", event.GetID())
         self._parameterNode.SetParameter("LowerThreshold", str(self.ui.thresholdSelector.lowerThreshold))
@@ -482,8 +525,15 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
         self.setNumParameter("0029,1006", str(self.ui.waterDensityLineEdit.text))
         self._parameterNode.SetParameter("OutputDirectory", str(self.ui.outputDirectorySelector.currentPath))
 
+        if self._parameterNode.GetParameter("Analysis") == 'Intervertebral':
+            self._parameterNode.SetParameter("MultiSelect", 'True')
+        else:
+            self._parameterNode.SetParameter("MultiSelect", 'False')
+
         self._parameterNode.EndModify(wasModified)
         self.updateGUIFromParameterNode()
+
+
 
     # Sets a parameter to a value if the value can be converted to a float, otherwises sets it to blank
     def setNumParameter(self, parameter, value):
@@ -500,11 +550,12 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
         """
         with slicer.util.tryWithErrorDisplay("Failed to compute results.", waitCursor=True):
             # Compute output
-            self.logic.process(self._parameterNode.GetNodeReference("InputVolume"), self._parameterNode.GetNodeReference("SegmentNode"), self._parameterNode.GetParameter("BoneSegmentID"), 
+            self.logic.process(self._parameterNode.GetNodeReference("InputVolume"), self._parameterNode.GetNodeReference("SegmentNode"), self._parameterNode.GetParameter("SegmentID"), 
                                self.ui.thresholdSelector.lowerThreshold,  self.ui.thresholdSelector.upperThreshold, self.ui.analysisSelector.currentText, self.ui.outputDirectorySelector.currentPath,
                                self.ui.AlternateDICOMCheckBox.checked, self._parameterNode.GetNodeReference("DICOMNode"), self.ui.ManualDICOMCheckBox.checked, 
                                {'0018,0050':self.ui.voxelSizeLineEdit.text, '0029,1000':self.ui.scalingLineEdit.text, '0029,1004':self.ui.densitySlopeLineEdit.text, '0029,1005':self.ui.densityInterceptLineEdit.text, '0029,1006':self.ui.waterDensityLineEdit.text}, self)        
         self.updateGUIFromParameterNode()
+
             
             
 
@@ -597,12 +648,27 @@ class MusculoskeletalAnalysisLogic(ScriptedLoadableModuleLogic):
         startTime = time.time()
         logging.info('Processing started')
         
-        # Get mask segment
-        maskID = mask.GetSegmentation().GetSegmentIdBySegmentName(maskLabel)
-        maskArray = vtk.vtkStringArray()
-        maskArray.InsertNextValue(maskID)
-        labelmap = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLLabelMapVolumeNode")
-        slicer.vtkSlicerSegmentationsModuleLogic.ExportSegmentsToLabelmapNode(mask, maskArray, labelmap, inputVolume)
+        # Get mask segments
+        if analysis == 'Intervertebral':
+            maskLabel = maskLabel.strip('()')
+            labels = maskLabel.split(', ')
+            maskID = mask.GetSegmentation().GetSegmentIdBySegmentName(labels[0].strip('\''))
+            maskArray = vtk.vtkStringArray()
+            maskArray.InsertNextValue(maskID)
+            labelmap = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLLabelMapVolumeNode")
+            slicer.vtkSlicerSegmentationsModuleLogic.ExportSegmentsToLabelmapNode(mask, maskArray, labelmap, inputVolume)
+
+            maskID2 = mask.GetSegmentation().GetSegmentIdBySegmentName(labels[1].strip('\''))
+            maskArray2 = vtk.vtkStringArray()
+            maskArray2.InsertNextValue(maskID2)
+            labelmap2 = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLLabelMapVolumeNode")
+            slicer.vtkSlicerSegmentationsModuleLogic.ExportSegmentsToLabelmapNode(mask, maskArray2, labelmap2, inputVolume)
+        else:
+            maskID = mask.GetSegmentation().GetSegmentIdBySegmentName(maskLabel)
+            maskArray = vtk.vtkStringArray()
+            maskArray.InsertNextValue(maskID)
+            labelmap = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLLabelMapVolumeNode")
+            slicer.vtkSlicerSegmentationsModuleLogic.ExportSegmentsToLabelmapNode(mask, maskArray, labelmap, inputVolume)
         
 
         # Get DICOM source
@@ -613,17 +679,10 @@ class MusculoskeletalAnalysisLogic(ScriptedLoadableModuleLogic):
         else:
             dSource = inputVolume
 
-        #if not manDICOM:
-        #    storage=dSource.GetStorageNode()
-        #    if storage is not None:
-        #        print(storage.GetFullNameFromFileName())
-        #    else: 
-        #        instanceUIDs = dSource.GetAttribute("DICOM.instanceUIDs").split()
-        #        print(slicer.dicomDatabase.fileForInstance(instanceUIDs[0]))
-
-        # Get Density info
-        slope=float(self.getDICOMTag(dSource, '0029,1006'))*float(self.getDICOMTag(dSource, '0029,1004'))/1000
-        intercept=float(self.getDICOMTag(dSource, '0029,1006'))*float(self.getDICOMTag(dSource, '0029,1004'))+float(self.getDICOMTag(dSource, '0029,1005'))
+        if analysis != 'Intervertebral':
+            # Get Density info
+            slope=float(self.getDICOMTag(dSource, '0029,1006'))*float(self.getDICOMTag(dSource, '0029,1004'))/1000
+            intercept=float(self.getDICOMTag(dSource, '0029,1006'))*float(self.getDICOMTag(dSource, '0029,1004'))+float(self.getDICOMTag(dSource, '0029,1005'))
 
         voxelSize = self.getDICOMTag(dSource, '0018,0050')
 
@@ -640,6 +699,10 @@ class MusculoskeletalAnalysisLogic(ScriptedLoadableModuleLogic):
             parameters = {"image":inputVolume, "mask":labelmap, "voxelSize":voxelSize, "slope":slope, "intercept":intercept, "inputName":inputVolume.GetName(), "output":outputDirectory}
             module=slicer.modules.densityanalysis
             requirements = [('nrrd', 'pynrrd')]
+        elif analysis == 'Intervertebral':
+            parameters = {"image":inputVolume, "mask1":labelmap, "mask2":labelmap2, "voxelSize":voxelSize, "inputName":inputVolume.GetName(), "output":outputDirectory}
+            module = slicer.modules.intervertebralanalysis
+            requirements = [('scipy', 'scipy'), ('nrrd', 'pynrrd')]
 
         # Install required python modules
         self.importRequest(requirements)
@@ -781,6 +844,24 @@ class MusculoskeletalAnalysisTest(ScriptedLoadableModuleTest):
         finally:
             # Clean up nodes
             slicer.mrmlScene.Clear()
+
+        try:
+            # Set test parameters
+            inputVolume = SampleData.downloadSample('Intervertebral1')
+            mask = SampleData.downloadSample('IntervertebralMask1')
+            maskLabel = "'Segment_1, Segment_2'"
+            lowerThreshold = 0
+            upperThreshold = 0
+            analysis="Intervertebral"      
+            self.delayDisplay('Loaded test data set')
+            # Test cancellous analysis
+            logic.process(inputVolume, mask, maskLabel, lowerThreshold, upperThreshold, analysis, outputDirectory, manDICOM=True, DICOMOptions=options, wait=True)
+            self.testFile(os.path.join(outputDirectory, "intervertebral.txt"), [str(date.today()), "Intervertebral1", 0.28008754758301957, 0.0694562859207484, 0.24798062791478137, 1.3788097828327734, 1.0306450189585161, 0.1775904, 0.128799782400107, 0.0073996])
+
+        finally:
+            # Clean up nodes
+            slicer.mrmlScene.Clear()
+
 
         self.delayDisplay('Test passed')
 

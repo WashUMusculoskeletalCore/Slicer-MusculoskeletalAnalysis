@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<executable>
+  <category>Analysis</category>
+  <index>0</index>
+  <title>Intervertebral Analysis</title>
+  <description><![CDATA[Perform Intervertebral Analysis on an image]]></description>
+  <version>0.1.0.</version>
+  <documentation-url>https://github.com/username/project</documentation-url>
+  <license/>
+  <contributor>Joseph Szatkowski (Washington University in St. Louis)</contributor>
+  <acknowledgements>
+    <![CDATA[Developed by the Washington University in St. Louis Musculoskeletal Reseach Center with the assistance of Michael Brodt, Anish Jagannathan, Matthew Silva, and Simon Tang.\n
+        This file was partially funded by NIH grant P30 AR074992.]]>
+  </acknowledgements>
+  <parameters>
+    <image>
+      <name>image</name>
+      <label>Image</label>
+      <channel>input</channel>
+      <index>0</index>
+      <description><![CDATA[The image to be analyzed]]></description>
+      <default>1.0</default>
+    </image>
+    <image type="label" reference ="image">
+      <name>mask1</name>
+      <label>Mask1</label>
+      <channel>input</channel>
+      <index>1</index>
+      <description><![CDATA[Mask covering the entire intervertebral disc or the nucleus pulposus (determined based on relative size)]]></description>
+    </image>
+    <image type="label" reference ="image">
+      <name>mask2</name>
+      <label>Mask2</label>
+      <channel>input</channel>
+      <index>2</index>
+      <description><![CDATA[Mask covering the entire intervertebral disc or the nucleus pulposus (determined based on relative size)]]></description>
+    </image>
+    <float>
+      <name>voxelSize</name>
+      <label>Voxel Size</label>
+      <channel>input</channel>
+      <index>3</index>
+      <description><![CDATA[The length of 1 voxel side in mm]]></description>
+    </float>
+    <string>
+      <name>inputName</name>
+      <label>Input Name</label>
+      <channel>input</channel>
+      <index>4</index>
+      <description><![CDATA[The name of the input image]]></description>
+    </string>
+    <string>
+      <name>output</name>
+      <label>Output Directory</label>
+      <channel>input</channel>
+      <index>5</index>
+      <description><![CDATA[The directory to output data files to]]></description>
+    </string>
+  </parameters>
+</executable>
