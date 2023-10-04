@@ -95,3 +95,20 @@ Standard Deviation of Density: The standard deviation of density of the segmente
 Min Density: The minimum density of the segmented volume
 Max Density: The maximum density of the segmented volume
 
+## Intervertebral Analysis
+### Input Parameters:
+Input Volume: A 3d image of an intervertebral disc
+Segement1, Segment2: Two segmentations containing the disc and the nucleus pulposus. (Differentiated by size)
+Output Directory: The location to save the output file to. File will be a tsv file named intervertebral.txt.
+
+### Output Parameters:
+Date Analysis Performed: The current date
+File ID: The output filepath
+Disc Volume: The volume of the disc
+Nucleus Pulposus Volume: The volume of the NP
+Volume Ratio: The ratio of whole disc volume to NP volume
+Annulus Fibrosus Width: The width of the AF, calculated by using rotating calipers algorithm on each slice and finding the maximum width
+Nucleus Pulposus Width: The width of the NP, calculated using the same method as above
+Disc Height: The height of the disc at its center
+Disc Height Ratio: The ratio of disc height to disc width
+Voxel Dimension: The side length of one voxel, measured in milimeters
