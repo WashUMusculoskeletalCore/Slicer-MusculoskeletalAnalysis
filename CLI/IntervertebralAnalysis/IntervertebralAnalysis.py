@@ -10,6 +10,21 @@ from MusculoskeletalAnalysisCLITools.writeReport import writeReport
 import MusculoskeletalAnalysisCLITools.reader as reader
 from MusculoskeletalAnalysisCLITools.width import width
 
+
+OUTPUT_FIELDS = [
+    ("Date Analysis Performed", "The current date"),
+    ("Input Volume", "Name of the input volume"),
+    ("Disc Volume (mm^3)", "The volume of the disc"),
+    ("Nucleus Pulposus Volume (mm^3)", "The volume of the NP"),
+    ("Volume Ratio", "The ratio of whole disc volume to NP volume"),
+    ("Annulus Fibrosus Width (mm)", "The width of the AF, calculated by using rotating calipers algorithm on each slice and finding the maximum width"),
+    ("Nucleus Pulposus Width (mm)", "The width of the NP, calculated using the same method as AF width"),
+    ("Disc Height (mm)", "The height of the disc at its center"),
+    ("Disc Height Ratio", "The ratio of disc height to disc width"),
+    ("Voxel Dimension (mm)", "The side length of one voxel, measured in milimeters"),
+]
+
+
 def main(inputImg, inputMask1, inputMask2, voxSize, name, output):   
     imgData=reader.readImg(inputImg)
     (_, maskData1) = reader.readMask(inputMask1)
@@ -45,18 +60,7 @@ def main(inputImg, inputMask1, inputMask2, voxSize, name, output):
     sys.stdout.flush()
 
     fPath = os.path.join(output, "intervertebral.txt")
-    header = [
-        'Date Analysis Performed',
-        'Input Volume',
-        'Disc Volume (mm^3)',
-        'Nucleus Pulposus Volume (mm^3)',
-        'Volume Ratio',
-        'Annulus Fibrosus Width (mm)',
-        'Nucleus Pulposus Width (mm)',
-        'Disc Height (mm)',
-        'Disc Height Ratio',
-        'Voxel Dimension (mm)'
-    ]
+    header = [field[0] for field in OUTPUT_FIELDS]
     data = [
         date.today(),
         name,

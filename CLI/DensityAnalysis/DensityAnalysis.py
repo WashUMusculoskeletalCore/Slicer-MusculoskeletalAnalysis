@@ -11,6 +11,25 @@ from MusculoskeletalAnalysisCLITools.density import densityMap
 import MusculoskeletalAnalysisCLITools.reader as reader
 
 
+OUTPUT_FIELDS = [
+    ("Date Analysis Performed", "The current date"),
+    ("Input Volume", "Name of the input volume"),
+    ("Area by Slice", "The area of the segment in each slice of each slice"),
+    ("Mean Density by Slice", "The average density of the segmented area each slice"),
+    ("Standard Deviation of Density by Slice", "The standard deviation of the density of each slice"),
+    ("Min Density by Slice", "The lowest density in the segment of each slice"),
+    ("Max Density by Slice", "The highest density in the segment of each slice"),
+    ("Mean Area", "The mean area of the segment of all slices"),
+    ("Standard Deviation of Area", "The standard deviation of the segmented area of all slices"),
+    ("Min Area", "The area of the smallest segment slice"),
+    ("Max Area", "The area of the largest segment slice"),
+    ("Mean Density", "The average density of the entire segmented volume"),
+    ("Standard Deviation of Density", "The standard deviation of density of the segmented volume"),
+    ("Min Density", "The minimum density of the segmented volume"),
+    ("Max Density", "The maximum density of the segmented volume"),
+]
+
+
 # Performs analysis on cortical bone
 # image: 3D image black and white of bone
 # mask: 3D labelmap of bone area, including cavities
@@ -61,23 +80,8 @@ def main(inputImg, inputMask, voxSize, slope, intercept, name, output):
 
     fPath = os.path.join(output, "density.txt")
 
-    header = [
-        'Date Analysis Performed',
-        'Input Volume',
-        'Area by Slice',
-        'Mean Density by Slice',
-        'Standard Deviation of Density by Slice',
-        'Min Density by Slice',
-        'Max Density by Slice',
-        'Mean Area',
-        'Standard Deviation of Area',
-        'Min Area',
-        'Max Area',
-        'Mean Density',
-        'Standard Deviation of Density',
-        'Min Density',
-        'Max Density'
-    ]
+    header = [field[0] for field in OUTPUT_FIELDS]
+
     data = [
         date.today(),
         name,
