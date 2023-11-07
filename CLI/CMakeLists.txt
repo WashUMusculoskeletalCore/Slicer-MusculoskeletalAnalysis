@@ -34,3 +34,4 @@ ctkMacroCompilePythonScript(
 add_subdirectory(CancellousAnalysis)
 add_subdirectory(CorticalAnalysis)
 add_subdirectory(DensityAnalysis)
+add_subdirectory(IntervertebralAnalysis)
