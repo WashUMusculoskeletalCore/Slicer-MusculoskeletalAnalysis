@@ -2,7 +2,7 @@ import numpy as np
 from skimage.measure import label
 
 # Takes a binary numpy array
-# Finds the largest connected component 
+# Finds the largest connected component
 # Returns the mask with only the largest component
 def largestCC(mask):
     # Creates a labelmap of the mask, where connected components have the same label

@@ -1,6 +1,6 @@
 import logging
 import os
-import time 
+import time
 import vtk
 import importlib
 
@@ -79,7 +79,7 @@ def registerSampleData():
         nodeNames='Cortical1'
     )
 
-   
+
     SampleData.SampleDataLogic.registerCustomSampleDataSource(
         # Category and sample name displayed in Sample Data module
         category='MusculoskeletalAnalysis',
@@ -97,7 +97,7 @@ def registerSampleData():
         # This node name will be used when the data set is loaded
         nodeNames='CorticalMask1'
     )
-    
+
     SampleData.SampleDataLogic.registerCustomSampleDataSource(
         # Category and sample name displayed in Sample Data module
         category='MusculoskeletalAnalysis',
@@ -228,7 +228,7 @@ def registerSampleData():
         # This node name will be used when the data set is loaded
         nodeNames='IntervertebralMask1'
     )
-    
+
 #
 # MusculoskeletalAnalysisWidget
 #
@@ -248,7 +248,7 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
         self._parameterNode = None
         self._updatingGUIFromParameterNode = False
 
-    def setup(self):        
+    def setup(self):
         """
         Called when the user opens the module the first time and the widget is initialized.
         """
@@ -299,9 +299,9 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
         self.ui.AnalysisProgress.hide()
         # Make sure parameter node is initialized (needed for module reload)
         self.initializeParameterNode()
-        
-        
-        
+
+
+
 
     def cleanup(self):
         """
@@ -372,9 +372,9 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
         # Set default state for flags
         self._parameterNode.SetParameter("Analyzing", "False")
 
-        
-        
-        
+
+
+
 
 
     def setParameterNode(self, inputParameterNode):
@@ -468,7 +468,7 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
             self.ui.applyButton.enabled = False
 
         # All the GUI updates are done
-        self._updatingGUIFromParameterNode = False       
+        self._updatingGUIFromParameterNode = False
 
     def inputVolumeChanged(self, event):
         """
@@ -510,14 +510,14 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
         elif caller == 'SegmentNode':
             self._parameterNode.SetNodeReferenceID("SegmentNode", event.GetID())
         elif caller == 'Segment':
-            self._parameterNode.SetParameter("SegmentID", str(event))           
+            self._parameterNode.SetParameter("SegmentID", str(event))
         elif caller == 'DICOM' and event is not None:
             self._parameterNode.SetNodeReferenceID("DICOMNode", event.GetID())
         self._parameterNode.SetParameter("LowerThreshold", str(self.ui.thresholdSelector.lowerThreshold))
         self._parameterNode.SetParameter("UpperThreshold", str(self.ui.thresholdSelector.upperThreshold))
         self._parameterNode.SetParameter("Analysis", str(self.ui.analysisSelector.currentText))
-        self._parameterNode.SetParameter("UseAlt", str(self.ui.AlternateDICOMCheckBox.checked))     
-        self._parameterNode.SetParameter("UseMan", str(self.ui.ManualDICOMCheckBox.checked)) 
+        self._parameterNode.SetParameter("UseAlt", str(self.ui.AlternateDICOMCheckBox.checked))
+        self._parameterNode.SetParameter("UseMan", str(self.ui.ManualDICOMCheckBox.checked))
         self.setNumParameter("0018,0050", str(self.ui.voxelSizeLineEdit.text))
         self.setNumParameter("0029,1000", str(self.ui.scalingLineEdit.text))
         self.setNumParameter("0029,1004", str(self.ui.densitySlopeLineEdit.text))
@@ -550,14 +550,14 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
         """
         with slicer.util.tryWithErrorDisplay("Failed to compute results.", waitCursor=True):
             # Compute output
-            self.logic.process(self._parameterNode.GetNodeReference("InputVolume"), self._parameterNode.GetNodeReference("SegmentNode"), self._parameterNode.GetParameter("SegmentID"), 
+            self.logic.process(self._parameterNode.GetNodeReference("InputVolume"), self._parameterNode.GetNodeReference("SegmentNode"), self._parameterNode.GetParameter("SegmentID"),
                                self.ui.thresholdSelector.lowerThreshold,  self.ui.thresholdSelector.upperThreshold, self.ui.analysisSelector.currentText, self.ui.outputDirectorySelector.currentPath,
-                               self.ui.AlternateDICOMCheckBox.checked, self._parameterNode.GetNodeReference("DICOMNode"), self.ui.ManualDICOMCheckBox.checked, 
-                               {'0018,0050':self.ui.voxelSizeLineEdit.text, '0029,1000':self.ui.scalingLineEdit.text, '0029,1004':self.ui.densitySlopeLineEdit.text, '0029,1005':self.ui.densityInterceptLineEdit.text, '0029,1006':self.ui.waterDensityLineEdit.text}, self)        
+                               self.ui.AlternateDICOMCheckBox.checked, self._parameterNode.GetNodeReference("DICOMNode"), self.ui.ManualDICOMCheckBox.checked,
+                               {'0018,0050':self.ui.voxelSizeLineEdit.text, '0029,1000':self.ui.scalingLineEdit.text, '0029,1004':self.ui.densitySlopeLineEdit.text, '0029,1005':self.ui.densityInterceptLineEdit.text, '0029,1006':self.ui.waterDensityLineEdit.text}, self)
         self.updateGUIFromParameterNode()
 
-            
-            
+
+
 
     # Updates
     def analysisUpdate(self, cliNode, event):
@@ -570,12 +570,12 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
                 print("CLI execution failed: " + errorText)
             else:
                 # success
-                print("CLI execution succeeded.")    
+                print("CLI execution succeeded.")
             startTime=float(self._parameterNode.GetParameter("startTime"))
             stopTime = time.time()
             logging.info(f'Processing completed in {stopTime-startTime:.2f} seconds')
             # Clean up temp nodes
-            slicer.mrmlScene.RemoveNode(self._parameterNode.GetNodeReference("labelMap"))          
+            slicer.mrmlScene.RemoveNode(self._parameterNode.GetNodeReference("labelMap"))
             slicer.mrmlScene.RemoveNode(cliNode)
             self._parameterNode.SetParameter("Analyzing", "False")
             self.updateGUIFromParameterNode()
@@ -583,7 +583,7 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
             self.ui.AnalysisProgress.setValue(cliNode.GetProgress())
 
 
-        
+
 
 
 #
@@ -626,7 +626,7 @@ class MusculoskeletalAnalysisLogic(ScriptedLoadableModuleLogic):
         if not inputVolume:
             raise ValueError("Input volume is invalid")
         if not mask or not maskLabel:
-            raise ValueError("Segment is invalid")       
+            raise ValueError("Segment is invalid")
         if altDICOM and not DICOMNode:
             raise ValueError("No DICOM source")
         if manDICOM and not all(DICOMOptions):
@@ -635,7 +635,7 @@ class MusculoskeletalAnalysisLogic(ScriptedLoadableModuleLogic):
         if not os.access(outputDirectory, os.W_OK):
             if not os.access(outputDirectory, os.F_OK):
                 # If directory doesn't exist try to create it
-                try: 
+                try:
                     os.makedirs(outputDirectory)
                     if not os.access(outputDirectory, os.W_OK):
                         raise ValueError("Output Directory is invalid")
@@ -647,7 +647,7 @@ class MusculoskeletalAnalysisLogic(ScriptedLoadableModuleLogic):
 
         startTime = time.time()
         logging.info('Processing started')
-        
+
         # Get mask segments
         if analysis == 'Intervertebral':
             maskLabel = maskLabel.strip('()')
@@ -669,7 +669,7 @@ class MusculoskeletalAnalysisLogic(ScriptedLoadableModuleLogic):
             maskArray.InsertNextValue(maskID)
             labelmap = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLLabelMapVolumeNode")
             slicer.vtkSlicerSegmentationsModuleLogic.ExportSegmentsToLabelmapNode(mask, maskArray, labelmap, inputVolume)
-        
+
 
         # Get DICOM source
         if altDICOM:
@@ -687,7 +687,7 @@ class MusculoskeletalAnalysisLogic(ScriptedLoadableModuleLogic):
         voxelSize = self.getDICOMTag(dSource, '0018,0050')
 
         # Prepare parameters for the selected function
-        if analysis == "Cortical": 
+        if analysis == "Cortical":
             parameters = {"image":inputVolume, "mask":labelmap, "lowerThreshold":lowerThreshold, "upperThreshold":upperThreshold, "voxelSize":voxelSize, "slope":slope, "intercept":intercept, "inputName":inputVolume.GetName(), "output":outputDirectory}
             module=slicer.modules.corticalanalysis
             requirements = [('scipy', 'scipy'), ('skimage', 'scikit-image'), ('nrrd', 'pynrrd')]
@@ -715,9 +715,9 @@ class MusculoskeletalAnalysisLogic(ScriptedLoadableModuleLogic):
             source._parameterNode.SetParameter("Analyzing", "True")
             source._parameterNode.SetNodeReferenceID("labelmapNode", labelmap.GetID())
             source._parameterNode.SetParameter("startTime", str(startTime))
-            node.AddObserver('ModifiedEvent', source.analysisUpdate)   
-        slicer.cli.run(module=module, node=node, wait_for_completion=wait)   
-        
+            node.AddObserver('ModifiedEvent', source.analysisUpdate)
+        slicer.cli.run(module=module, node=node, wait_for_completion=wait)
+
 
     # Used to get dicom metadata from the volume
     # source: the volume node or DICOM dict
@@ -796,8 +796,8 @@ class MusculoskeletalAnalysisTest(ScriptedLoadableModuleTest):
         # Make sure the scene is clear before starting
         slicer.mrmlScene.Clear()
         registerSampleData()
-       
-        
+
+
         try:
             # Set test parameters
             inputVolume = SampleData.downloadSample('Cortical1')
@@ -808,20 +808,20 @@ class MusculoskeletalAnalysisTest(ScriptedLoadableModuleTest):
             analysis="Cortical"
             options = {"0018,0050":0.0073996, "0029,1000":4096,"0029,1004":365.712, "0029,1005":-199.725998, "0029,1006":0.4939}
             outputDirectory = os.path.expanduser("~\\Documents\\MusculoskeletalAnalysisTest")
-        
+
             self.delayDisplay('Loaded test data set')
             # Test the module logic
 
             logic = MusculoskeletalAnalysisLogic()
 
-        
+
             # Test cortical analysis
             logic.process(inputVolume, mask, maskLabel, lowerThreshold, upperThreshold, analysis, outputDirectory, manDICOM=True, DICOMOptions=options, wait=True)
             self.testFile(os.path.join(outputDirectory, "cortical.txt"), [str(date.today()), "Cortical1", 0.22723809679518692, 0.06294702323770145, 1079.7468139192893, 0.09759454038853543, 1.6929074569373408, 0.9198784024224288, 0.773029054514912, 0.48131583996128624, 0.0073996])
         finally:
             # Clean up nodes
             slicer.mrmlScene.Clear()
-        
+
         try:
             # Set test parameters
             inputVolume = SampleData.downloadSample('Cancellous1')
@@ -829,7 +829,7 @@ class MusculoskeletalAnalysisTest(ScriptedLoadableModuleTest):
             maskLabel = "Segment_1"
             lowerThreshold = 1500
             upperThreshold = 10000
-            analysis="Cancellous"      
+            analysis="Cancellous"
             self.delayDisplay('Loaded test data set')
             # Test cancellous analysis
             logic.process(inputVolume, mask, maskLabel, lowerThreshold, upperThreshold, analysis, outputDirectory, manDICOM=True, DICOMOptions=options, wait=True)
@@ -852,7 +852,7 @@ class MusculoskeletalAnalysisTest(ScriptedLoadableModuleTest):
             maskLabel = "'Segment_1, Segment_2'"
             lowerThreshold = 0
             upperThreshold = 0
-            analysis="Intervertebral"      
+            analysis="Intervertebral"
             self.delayDisplay('Loaded test data set')
             # Test cancellous analysis
             logic.process(inputVolume, mask, maskLabel, lowerThreshold, upperThreshold, analysis, outputDirectory, manDICOM=True, DICOMOptions=options, wait=True)
@@ -890,4 +890,4 @@ class MusculoskeletalAnalysisTest(ScriptedLoadableModuleTest):
             except ValueError:
                 # Checks that strings match
                 assert data[i] == testData[i], "Value for " + header[i] + ", " + testData[i] + ", doesn't match expected value " + str(data[i]) + "."
-        
+

@@ -5,8 +5,8 @@ from nrrd import read
 # Converts slicer image and segmentation volumes into numpy format
 
 # readImg
-# Reads an image file as input, returns the image as a numpy array     
-def readImg(inputImg):   
+# Reads an image file as input, returns the image as a numpy array
+def readImg(inputImg):
     imgReader = sitk.ImageFileReader()
     imgReader.SetFileName(inputImg)
     image = imgReader.Execute()

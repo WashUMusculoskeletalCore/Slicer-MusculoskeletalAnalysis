@@ -37,16 +37,16 @@ def rotatingCaliper(pts):
     # Find the furthest point
     while crossProduct(hull[n - 1], hull[0], hull[(k + 1) % n]) > crossProduct(hull[n - 1], hull[0], hull[k]):
         k += 1
- 
+
     res = 0
- 
+
     # For each point between 0 and k find the opposite point j
     for i in range(k + 1):
         j = (i + 1) % n
         while crossProduct(hull[i], hull[(i + 1) % n], hull[(j + 1) % n]) > crossProduct(hull[i], hull[(i + 1) % n], hull[j]):
             j = (j + 1) % n
             res = max(res, math.sqrt((hull[i][0]-hull[j][0])**2+(hull[i][0]-hull[j][1])**2))
- 
+
     return res
 
 def edge(img):

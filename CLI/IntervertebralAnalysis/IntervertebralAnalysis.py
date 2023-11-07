@@ -10,7 +10,7 @@ from MusculoskeletalAnalysisCLITools.writeReport import writeReport
 import MusculoskeletalAnalysisCLITools.reader as reader
 from MusculoskeletalAnalysisCLITools.width import width
 
-def main(inputImg, inputMask1, inputMask2, voxSize, name, output):   
+def main(inputImg, inputMask1, inputMask2, voxSize, name, output):
     imgData=reader.readImg(inputImg)
     (_, maskData1) = reader.readMask(inputMask1)
     (_, maskData2) = reader.readMask(inputMask2)
@@ -22,7 +22,7 @@ def main(inputImg, inputMask1, inputMask2, voxSize, name, output):
     (maskData, npData, imgData) = crop(maskData, npData, imgData)
     if np.count_nonzero(maskData) == 0 or np.count_nonzero(npData) == 0:
          raise Exception("Segmentation mask is empty.")
-    
+
     volume = np.count_nonzero(maskData) * voxSize**3
     npVolume = np.count_nonzero(npData) * voxSize**3
     vr = npVolume/volume

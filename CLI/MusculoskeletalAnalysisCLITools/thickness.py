@@ -10,7 +10,7 @@ def findSpheres(mask):
 
     a,b,c=np.nonzero(mask)
     order = np.argsort(dist[a,b,c])
-    
+
     for n in order:
         # For each point, find the thickness radius at that point from the distance map
         x=a[n]
