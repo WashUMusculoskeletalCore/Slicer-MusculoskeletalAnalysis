@@ -1,14 +1,14 @@
 #-----------------------------------------------------------------------------
 set(PYTHON_TOOLS
   MusculoskeletalAnalysisCLITools/__init__.py
+  MusculoskeletalAnalysisCLITools/crop.py
+  MusculoskeletalAnalysisCLITools/density.py
   MusculoskeletalAnalysisCLITools/fill.py
+  MusculoskeletalAnalysisCLITools/largestCC.py
+  MusculoskeletalAnalysisCLITools/reader.py
+  MusculoskeletalAnalysisCLITools/shape.py
   MusculoskeletalAnalysisCLITools/thickness.py
   MusculoskeletalAnalysisCLITools/writeReport.py
-  MusculoskeletalAnalysisCLITools/reader.py
-  MusculoskeletalAnalysisCLITools/crop.py
-  MusculoskeletalAnalysisCLITools/largestCC.py
-  MusculoskeletalAnalysisCLITools/shape.py
-  MusculoskeletalAnalysisCLITools/density.py
   )
 
 set(binary_dir "${CMAKE_BINARY_DIR}/${Slicer_CLIMODULES_BIN_DIR}")
@@ -31,6 +31,6 @@ ctkMacroCompilePythonScript(
     NO_INSTALL_SUBDIR
     )
 
-add_subdirectory(CorticalAnalysis)
 add_subdirectory(CancellousAnalysis)
+add_subdirectory(CorticalAnalysis)
 add_subdirectory(DensityAnalysis)
