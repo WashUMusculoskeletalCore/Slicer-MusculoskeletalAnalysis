@@ -1,7 +1,5 @@
 # Calculates the width of a 2d shape using rotating calipers method
-import math
-from scipy.ndimage import convolve
-import numpy as np
+
 
 def crossProduct(a,b,c):
     return ((b[0]-a[0])*(c[1]-a[1]) - (b[1]-a[1])*(c[0]-a[0]))
@@ -26,6 +24,8 @@ def convexHull(pts):
     return hull[:-1]
 
 def rotatingCaliper(pts):
+    import math
+
     hull = convexHull(pts)
     n = len(hull)
 
@@ -50,6 +50,9 @@ def rotatingCaliper(pts):
     return res
 
 def edge(img):
+    import numpy as np
+    from scipy.ndimage import convolve
+
     filt = [[0,-1,0],
               [-1,4,-1],
               [0,-1,0]]
