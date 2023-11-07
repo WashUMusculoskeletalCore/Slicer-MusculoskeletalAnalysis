@@ -43,16 +43,16 @@ The program requires information from certain DICOM tags to run. Normally it can
 The output file is a`tsv` file named `cortical.txt` with the following columns:
 
 * **Date Analysis Performed**: The current date
-* **File ID**: The output filepath
-* **Mean Cortical Thickness**: The mean thickness of the bone, measured by largest sphere thickness, in milimeters.
-* **Cortical Thickness Standard Deviation**: The standard deviation of the above measurement.
-* **Tissue Mineral Density**: The mean density of the bone, measured in miligrams of hydroxyapatite per cubic centimeter
+* **Input Volume**: Name of the input volume
+* **Mean Cortical Thickness (mm)**: The mean thickness of the bone, measured by largest sphere thickness, in milimeters
+* **Cortical Thickness Standard Deviation (mm)**: The standard deviation of the above measurement
+* **Tissue Mineral Density(mgHA/cm^3)**: The mean density of the bone, measured in miligrams of hydroxyapatite per cubic centimeter
 * **Porosity**: The fraction of the bone area made up of pores
-* **Total Area**: The area of the bone and medullary cavity. All areas are measured in average square milimeters per slice
-* **Bone Area**: The area of the bone
-* **Medullary Area**: The area of the medullary cavity
-* **Polar Moment of Interia**: The moment of intertia around the z-axis, based on the shape of the mask. Measured in mm^4
-* **Voxel Dimension**: The side length of one voxel, measured in milimeters
+* **Total Area (mm^2)**: The area of the bone and medullary cavity. All areas are measured in average square milimeters per slice
+* **Bone Area (mm^2)**: The area of the bone
+* **Medullary Area (mm^2)**: The area of the medullary cavity
+* **Polar Moment of Interia(mm^4)**: The moment of intertia around the z-axis, based on the shape of the mask. Measured in mm^4
+* **Voxel Dimension (mm)**: The side length of one voxel, measured in milimeters
 
 ## Cancellous Analysis
 
@@ -69,19 +69,19 @@ The output file is a`tsv` file named `cortical.txt` with the following columns:
 The output file is a`tsv` file named `cancellous.txt` with the following columns:
 
 * **Date Analysis Performed**: The current date
-* **File ID**: The output filepath
-* **Total Volume**: The volume of the segmented area
-* **Bone Volume**: The volume of cancellous bone in the segmented area, calculated using marching cubes
+* **Input Volume**: Name of the input volume
+* **Total Volume (mm^3)**: The volume of the segmented area
+* **Bone Volume (mm^3)**: The volume of cancellous bone in the segmented area, calculated using marching cubes
 * **Bone Volume/Total Volume**: The fraction of the volume that is bone
-* **Mean Trabecular Thickness**: The mean thickess of the bone, measured using largest sphere thickness, in milimeters
-* **Trabecular Thickness Standard Deviation**: The standard deviation of the above mean
-* **Mean Trabecular Spacing**: The mean thickness of the non area not containing bone in milimeters, measured using the same method as bone thickness.
-* **Trabecular Spacing Standard Deviation**: The standard deviation of the above mean
+* **Mean Trabecular Thickness (mm)**: The mean thickess of the bone, measured using largest sphere thickness, in milimeters
+* **Trabecular Thickness Standard Deviation (mm)**: The standard deviation of the mean trabecular thickness
+* **Mean Trabecular Spacing (mm)**: The mean thickness of the non area not containing bone in milimeters, measured using the same method as bone thickness.
+* **Trabecular Spacing Standard Deviation (mm)**: The standard deviation of the mean trabecular spacing
 * **Trabecular Number**: Approximated as inverse of trabecular spacing
-* **Structural Model Index**: A measurement of the trabecular shape. 0 is a plate, 3 is a rod, 4 is a sphere
+* **Structure Model Index**: A measurement of the trabecular shape. 0 is a plate, 3 is a rod, 4 is a sphere
 * **Connectivity Density**: A measurement of the number of connections per volume, based on the Euler characteristic of the bone after removing isolated components and holes
-* **Tissue Mineral Density**: The mean density of the bone, measured in miligrams of hydroxyapatite per cubic centimeter
-* **Voxel Dimension**: The side length of one voxel, measured in milimeters
+* **Tissue Mineral Density(mgHA/cm^3)**: The mean density of the bone, measured in miligrams of hydroxyapatite per cubic centimeter
+* **Voxel Dimension (mm)**: The side length of one voxel, measured in milimeters
 * **Lower Threshold**: The lower threshold value for bone
 * **Upper Threshold**: The upper threshold value for bone
 
@@ -98,7 +98,7 @@ The output file is a`tsv` file named `cancellous.txt` with the following columns
 The output file is a`tsv` file named `density.txt`.
 
 * **Date Analysis Performed**: The current date
-* **File ID**: The output filepath
+* **Input Volume**: Name of the input volume
 * **Area by Slice**: The area of the segment in each slice of each slice
 * **Mean Density by Slice**: The average density of the segmented area each slice
 * **Standard Deviation of Density by Slice**: The standard deviation of the density of each slice
@@ -126,15 +126,15 @@ The output file is a`tsv` file named `density.txt`.
 The output file is a`tsv` file named `intervertebral.txt` with the following columns:
 
 * **Date Analysis Performed**: The current date
-* **File ID**: The output filepath
-* **Disc Volume**: The volume of the disc
-* **Nucleus Pulposus Volume**: The volume of the NP
+* **Input Volume**: Name of the input volume
+* **Disc Volume (mm^3)**: The volume of the disc
+* **Nucleus Pulposus Volume (mm^3)**: The volume of the NP
 * **Volume Ratio**: The ratio of whole disc volume to NP volume
-* **Annulus Fibrosus Width**: The width of the AF, calculated by using rotating calipers algorithm on each slice and finding the maximum width
-* **Nucleus Pulposus Width**: The width of the NP, calculated using the same method as above
-* **Disc Height**: The height of the disc at its center
+* **Annulus Fibrosus Width (mm)**: The width of the AF, calculated by using rotating calipers algorithm on each slice and finding the maximum width
+* **Nucleus Pulposus Width (mm)**: The width of the NP, calculated using the same method as AF width
+* **Disc Height (mm)**: The height of the disc at its center
 * **Disc Height Ratio**: The ratio of disc height to disc width
-* **Voxel Dimension**: The side length of one voxel, measured in milimeters
+* **Voxel Dimension (mm)**: The side length of one voxel, measured in milimeters
 
 ## Python Dependencies
 
