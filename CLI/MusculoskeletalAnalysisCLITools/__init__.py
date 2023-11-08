@@ -1,1 +1,10 @@
-__all__ = ['fill', 'thickness', 'writeReport', 'reader', 'crop', 'largestCC', 'shape', 'density']
+__all__ = [
+    "crop",
+    "density",
+    "fill",
+    "largestCC",
+    "reader",
+    "shape",
+    "thickness",
+    "writeReport",
+]
