@@ -1,8 +1,11 @@
-# Takes a binary numpy array
-# Finds the largest connected component 
-# Returns the mask with only the largest component
-def largestCC(mask):
 
+def largestCC(mask):
+    """Finds the largest connected component.
+
+    Takes a binary numpy array.
+
+    Returns the mask with only the largest component
+    """
     import numpy as np
     from skimage.measure import label
 

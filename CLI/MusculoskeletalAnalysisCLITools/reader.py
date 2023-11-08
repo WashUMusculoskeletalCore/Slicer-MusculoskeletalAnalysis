@@ -1,8 +1,8 @@
-# Converts slicer image and segmentation volumes into numpy format
+"""Converts slicer image and segmentation volumes into numpy format."""
 
-# readImg
-# Reads an image file as input, returns the image as a numpy array     
+
 def readImg(inputImg):   
+    """Reads an image file as input, returns the image as a numpy array."""
     import SimpleITK as sitk
 
     imgReader = sitk.ImageFileReader()
@@ -12,9 +12,9 @@ def readImg(inputImg):
     imgData = sitk.GetArrayFromImage(image)
     return imgData
 
-# readMask
-# Reads an nrrd file as input, returns the image as a binary numpy array
+
 def readMask(inputMask):
+    """Reads an nrrd file as input, returns the image as a binary numpy array."""
     from nrrd import read
 
     maskReader = read(inputMask)

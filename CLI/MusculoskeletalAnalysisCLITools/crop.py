@@ -1,7 +1,8 @@
 import numpy as np
 
-# Crops a series of ndarrays to the range of nonzero values in the first array for each dimension
+
 def crop(*args):
+    """Crops a series of ndarrays to the range of nonzero values in the first array for each dimension."""
     template = args[0]
     # Get the coodinates of all nonzero points in the first input as a tuple of arrays
     coords = np.nonzero(template)

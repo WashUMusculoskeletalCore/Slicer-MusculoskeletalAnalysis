@@ -1,8 +1,12 @@
-# Takes a 2D binary numpy array and an integer radius
-# Performs morphological close with the given radius, then fills any holes not connected to the outer edge
-# Returns the transformed array
-def fill(mask, radius):
 
+
+def fill(mask, radius):
+    """Performs morphological close with the given radius, then fills any holes not connected to the outer edge.
+
+    Takes a 2D binary numpy array and an integer radius.
+
+    Returns the transformed array.
+    """
     import numpy as np
     import skimage.morphology
 

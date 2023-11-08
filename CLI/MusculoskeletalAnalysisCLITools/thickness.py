@@ -1,6 +1,7 @@
-# Calculates thickness by finding the largest sphere containing each point
+
 
 def findSpheres(mask):
+    """Calculates thickness by finding the largest sphere containing each point."""
     import numpy as np
     from math import ceil
     from scipy.ndimage import distance_transform_edt
