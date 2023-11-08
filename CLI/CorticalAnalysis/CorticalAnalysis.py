@@ -2,16 +2,21 @@
 
 import sys
 import os
-import numpy as np
 from datetime import date
+
+import numpy as np
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from MusculoskeletalAnalysisCLITools.crop import crop
-from MusculoskeletalAnalysisCLITools.thickness import findSpheres
-from MusculoskeletalAnalysisCLITools.fill import fill
-from MusculoskeletalAnalysisCLITools.writeReport import writeReport
-from MusculoskeletalAnalysisCLITools.largestCC import largestCC
-import MusculoskeletalAnalysisCLITools.reader as reader
-from MusculoskeletalAnalysisCLITools.density import densityMap
+from MusculoskeletalAnalysisCLITools import (
+    crop,
+    densityMap,
+    findSpheres,
+    fill,
+    largestCC,
+    readImg,
+    readMask,
+    writeReport,
+)
 
 
 OUTPUT_FIELDS = [
@@ -37,8 +42,8 @@ OUTPUT_FIELDS = [
 # slope, intercept and scale: parameters for density conversion
 # output: The name of the output directory
 def main(inputImg, inputMask, lower, upper, voxSize, slope, intercept, name, output):   
-    imgData=reader.readImg(inputImg)
-    (_, maskData) = reader.readMask(inputMask)
+    imgData = readImg(inputImg)
+    (_, maskData) = readMask(inputMask)
     (maskData, imgData) = crop(maskData, imgData)
     if np.count_nonzero(maskData) == 0:
          raise Exception("Segmentation mask is empty.")

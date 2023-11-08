@@ -3,14 +3,20 @@
 import sys
 import os
 from datetime import date
+
 import numpy as np
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from MusculoskeletalAnalysisCLITools.crop import crop
-from MusculoskeletalAnalysisCLITools.thickness import findSpheres
-from MusculoskeletalAnalysisCLITools.writeReport import writeReport
-import MusculoskeletalAnalysisCLITools.reader as reader
-import MusculoskeletalAnalysisCLITools.shape as shape
-from MusculoskeletalAnalysisCLITools.density import densityMap
+from MusculoskeletalAnalysisCLITools import (
+  crop,
+  bWshape,
+  densityMap,
+  findSpheres,
+  readImg,
+  readMask,
+  updateVertices,
+  writeReport,
+)
 
 
 OUTPUT_FIELDS = [
@@ -43,15 +49,15 @@ OUTPUT_FIELDS = [
 def main(inputImg, inputMask, lower, upper, voxSize, slope, intercept, name, output):
     from skimage import measure
 
-    imgData=reader.readImg(inputImg)
-    (_, maskData) = reader.readMask(inputMask)
+    imgData = readImg(inputImg)
+    (_, maskData) = readMask(inputMask)
     
     (maskData, imgData) = crop(maskData, imgData)
     if np.count_nonzero(maskData) == 0:
          raise Exception("Segmentation mask is empty.")
     trabecular = (imgData > lower) & (imgData <= upper)
     # Create mesh using marching squares and calculate its volume
-    boneMesh = shape.bWshape(trabecular)
+    boneMesh = bWshape(trabecular)
     boneVolume=boneMesh.volume * voxSize**3
     # Find volume of entire mask by counting voxels
     totalVolume = np.count_nonzero(maskData) * voxSize**3
@@ -83,7 +89,7 @@ def main(inputImg, inputMask, lower, upper, voxSize, slope, intercept, name, out
     dr = 0.000001
     # Creates a new mesh by moving each vertex a small distance in the direction of its vertex normal, then find the difference in surface area
     newVert=np.add(boneMesh.vertices, boneMesh.vertex_normals*dr)
-    boneMesh=shape.updateVertices(boneMesh, newVert)
+    boneMesh = updateVertices(boneMesh, newVert)
     dS = (boneMesh.area*(voxSize**2))-bS
     # Convert to mm
     dr = dr*voxSize

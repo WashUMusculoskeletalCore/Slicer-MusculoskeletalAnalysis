@@ -2,13 +2,18 @@
 
 import sys
 import os
-import numpy as np
 from datetime import date
+
+import numpy as np
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from MusculoskeletalAnalysisCLITools.crop import crop
-from MusculoskeletalAnalysisCLITools.writeReport import writeReport
-import MusculoskeletalAnalysisCLITools.reader as reader
-from MusculoskeletalAnalysisCLITools.width import width
+from MusculoskeletalAnalysisCLITools import (
+   crop,
+   readImg,
+   readMask,
+   width,
+   writeReport,
+)
 
 
 OUTPUT_FIELDS = [
@@ -26,9 +31,9 @@ OUTPUT_FIELDS = [
 
 
 def main(inputImg, inputMask1, inputMask2, voxSize, name, output):   
-    imgData=reader.readImg(inputImg)
-    (_, maskData1) = reader.readMask(inputMask1)
-    (_, maskData2) = reader.readMask(inputMask2)
+    imgData = readImg(inputImg)
+    (_, maskData1) = readMask(inputMask1)
+    (_, maskData2) = readMask(inputMask2)
     # Set the np mask to the smaller one
     if np.count_nonzero(maskData1) > np.count_nonzero(maskData2):
         (maskData, npData, imgData) = crop(maskData1, maskData2, imgData)

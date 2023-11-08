@@ -2,13 +2,18 @@
 
 import sys
 import os
-import numpy as np
 from datetime import date
+
+import numpy as np
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from MusculoskeletalAnalysisCLITools.crop import crop
-from MusculoskeletalAnalysisCLITools.writeReport import writeReport
-from MusculoskeletalAnalysisCLITools.density import densityMap
-import MusculoskeletalAnalysisCLITools.reader as reader
+from MusculoskeletalAnalysisCLITools import (
+  crop,
+  densityMap,
+  readImg,
+  readMask,
+  writeReport,
+)
 
 
 OUTPUT_FIELDS = [
@@ -37,8 +42,8 @@ OUTPUT_FIELDS = [
 # slope, intercept and scale: parameters of the equation for converting image values to mgHA/ccm
 # output: The name of the output directory
 def main(inputImg, inputMask, voxSize, slope, intercept, name, output):
-    imgData=reader.readImg(inputImg)
-    (_, maskData) = reader.readMask(inputMask)
+    imgData = readImg(inputImg)
+    (_, maskData) = readMask(inputMask)
     (maskData, imgData) = crop(maskData, imgData)
     if np.count_nonzero(maskData) == 0:
          raise Exception("Segmentation mask is empty.")
