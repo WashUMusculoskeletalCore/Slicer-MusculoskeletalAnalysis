@@ -6,5 +6,6 @@ __all__ = [
     "reader",
     "shape",
     "thickness",
+    "width",
     "writeReport",
 ]

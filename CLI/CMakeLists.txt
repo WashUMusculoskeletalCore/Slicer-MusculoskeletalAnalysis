@@ -8,6 +8,7 @@ set(PYTHON_TOOLS
   MusculoskeletalAnalysisCLITools/reader.py
   MusculoskeletalAnalysisCLITools/shape.py
   MusculoskeletalAnalysisCLITools/thickness.py
+  MusculoskeletalAnalysisCLITools/width.py
   MusculoskeletalAnalysisCLITools/writeReport.py
   )
 
