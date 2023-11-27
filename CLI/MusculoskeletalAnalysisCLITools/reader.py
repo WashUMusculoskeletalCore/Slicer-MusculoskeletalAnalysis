@@ -1,7 +1,7 @@
 """Converts slicer image and segmentation volumes into numpy format."""
 
 
-def readImg(inputImg):   
+def readImg(inputImg):
     """Reads an image file as input, returns the image as a numpy array."""
     import SimpleITK as sitk
 

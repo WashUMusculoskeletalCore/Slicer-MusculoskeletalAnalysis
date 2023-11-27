@@ -38,7 +38,7 @@ OUTPUT_FIELDS = [
 # Performs analysis on cortical bone
 # image: 3D image black and white of bone
 # mask: 3D labelmap of bone area, including cavities
-# voxSize: The physical side length of the voxels, in mm 
+# voxSize: The physical side length of the voxels, in mm
 # slope, intercept and scale: parameters of the equation for converting image values to mgHA/ccm
 # output: The name of the output directory
 def main(inputImg, inputMask, voxSize, slope, intercept, name, output):
@@ -103,7 +103,7 @@ def main(inputImg, inputMask, voxSize, slope, intercept, name, output):
         stdDensity,
         minDensity,
         maxDensity
-    ] 
+    ]
     writeReport(fPath, header, data)
 
 

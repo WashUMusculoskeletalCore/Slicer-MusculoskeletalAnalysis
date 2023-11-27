@@ -43,7 +43,7 @@ OUTPUT_FIELDS = [
 # image: 3D image black and white of bone
 # mask: 3D labelmap of bone area, including cavities
 # threshold: The threshold for bone in the image. Any pixels with a higher value will be considered bone.
-# voxSize: The physical side length of the voxels, in mm 
+# voxSize: The physical side length of the voxels, in mm
 # slope, intercept and scale: parameters for density conversion
 # output: The name of the output directory
 def main(inputImg, inputMask, lower, upper, voxSize, slope, intercept, name, output):
@@ -81,7 +81,7 @@ def main(inputImg, inputMask, lower, upper, voxSize, slope, intercept, name, out
     print("""<filter-progress>{}</filter-progress>""".format(.60))
     sys.stdout.flush()
     # SMI
-    # Calculated by finding a 3d mesh, expanding the vertices by a small amount, and calculate a value based on the relative difference in surface area 
+    # Calculated by finding a 3d mesh, expanding the vertices by a small amount, and calculate a value based on the relative difference in surface area
     # Measures the characteristics of the shape; 0 for plate-like, 3 for rod-like, 4 for sphere-like
     # Surface area
     bS = boneMesh.area*(voxSize**2)
@@ -117,7 +117,7 @@ def main(inputImg, inputMask, lower, upper, voxSize, slope, intercept, name, out
     # connD gives an approximate measure of holes/connections per volume
     connD = (1-phi)/totalVolume
 
-    
+
 
 
     fPath = os.path.join(output, "cancellous.txt")

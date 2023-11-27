@@ -19,7 +19,7 @@ def fill(mask, radius):
 
     # seed is a mask of all ones, except zero where mask has zeros on the edges
     seed[0,:] = mask[0,:]
-    seed[-1,:] = mask[-1,:]   
+    seed[-1,:] = mask[-1,:]
     seed[:,-1] = mask[:,-1]
     seed[:,0] = mask[:,0]
     # seed's zero areas are expanded to match mask's zeros

@@ -1,4 +1,3 @@
-
 def largestCC(mask):
     """Finds the largest connected component.
 

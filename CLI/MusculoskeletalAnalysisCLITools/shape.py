@@ -1,5 +1,3 @@
-
-
 def bWshape(shape):
     """Creates a triangular mesh shape using marching cubes algorithm."""
     from skimage import measure
