@@ -2,16 +2,37 @@
 
 import sys
 import os
-import numpy as np
 from datetime import date
+
+import numpy as np
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from MusculoskeletalAnalysisCLITools.crop import crop
-from MusculoskeletalAnalysisCLITools.thickness import findSpheres
-from MusculoskeletalAnalysisCLITools.fill import fill
-from MusculoskeletalAnalysisCLITools.writeReport import writeReport
-from MusculoskeletalAnalysisCLITools.largestCC import largestCC
-import MusculoskeletalAnalysisCLITools.reader as reader
-from MusculoskeletalAnalysisCLITools.density import densityMap
+from MusculoskeletalAnalysisCLITools import (
+    crop,
+    densityMap,
+    findSpheres,
+    fill,
+    largestCC,
+    readImg,
+    readMask,
+    writeReport,
+)
+
+
+OUTPUT_FIELDS = [
+    ("Date Analysis Performed", "The current date"),
+    ("Input Volume", "Name of the input volume"),
+    ("Mean Cortical Thickness (mm)", "The mean thickness of the bone, measured by largest sphere thickness, in milimeters"),
+    ("Cortical Thickness Standard Deviation (mm)", "The standard deviation of the above measurement"),
+    ("Tissue Mineral Density(mgHA/cm^3)", "The mean density of the bone, measured in miligrams of hydroxyapatite per cubic centimeter"),
+    ("Porosity", "The fraction of the bone area made up of pores"),
+    ("Total Area (mm^2)", "The area of the bone and medullary cavity. All areas are measured in average square milimeters per slice"),
+    ("Bone Area (mm^2)", "The area of the bone"),
+    ("Medullary Area (mm^2)", "The area of the medullary cavity"),
+    ("Polar Moment of Interia(mm^4)", "The moment of intertia around the z-axis, based on the shape of the mask. Measured in mm^4"),
+    ("Voxel Dimension (mm)", "The side length of one voxel, measured in milimeters"),
+]
+
 
 # Performs analysis on cortical bone
 # image: 3D image black and white of bone
@@ -21,8 +42,8 @@ from MusculoskeletalAnalysisCLITools.density import densityMap
 # slope, intercept and scale: parameters for density conversion
 # output: The name of the output directory
 def main(inputImg, inputMask, lower, upper, voxSize, slope, intercept, name, output):
-    imgData=reader.readImg(inputImg)
-    (_, maskData) = reader.readMask(inputMask)
+    imgData = readImg(inputImg)
+    (_, maskData) = readMask(inputMask)
     (maskData, imgData) = crop(maskData, imgData)
     if np.count_nonzero(maskData) == 0:
          raise Exception("Segmentation mask is empty.")
@@ -86,19 +107,7 @@ def main(inputImg, inputMask, lower, upper, voxSize, slope, intercept, name, out
 
     fPath = os.path.join(output, "cortical.txt")
 
-    header = [
-        'Date Analysis Performed',
-        'Input Volume',
-        'Mean Cortical Thickness (mm)',
-        'Cortical Thickness Standard Deviation (mm)',
-        'Tissue Mineral Density(mgHA/cm^3)',
-        'Porosity',
-        'Total Area (mm^2)',
-        'Bone Area (mm^2)',
-        'Medullary Area (mm^2)',
-        'Polar Moment of Interia(mm^4)',
-        'Voxel Dimension (mm)'
-    ]
+    header = [field[0] for field in OUTPUT_FIELDS]
     data = [
         date.today(),
         name,

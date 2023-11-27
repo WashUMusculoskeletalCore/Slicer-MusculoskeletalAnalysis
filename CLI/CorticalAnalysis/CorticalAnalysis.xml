@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <executable>
-  <category>Analysis</category>
+  <category>Quantification.Musculoskeletal</category>
   <index>0</index>
   <title>Cortical Analysis</title>
-  <description><![CDATA[Perform Cortical Analysis on an image]]></description>
+  <description><![CDATA[Perform Musculoskeletal Cortical Analysis on an image]]></description>
   <version>0.1.0.</version>
   <documentation-url>https://github.com/username/project</documentation-url>
   <license/>

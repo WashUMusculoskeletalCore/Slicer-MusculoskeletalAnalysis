@@ -2,13 +2,37 @@
 
 import sys
 import os
-import numpy as np
 from datetime import date
+
+import numpy as np
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from MusculoskeletalAnalysisCLITools.crop import crop
-from MusculoskeletalAnalysisCLITools.writeReport import writeReport
-from MusculoskeletalAnalysisCLITools.density import densityMap
-import MusculoskeletalAnalysisCLITools.reader as reader
+from MusculoskeletalAnalysisCLITools import (
+  crop,
+  densityMap,
+  readImg,
+  readMask,
+  writeReport,
+)
+
+
+OUTPUT_FIELDS = [
+    ("Date Analysis Performed", "The current date"),
+    ("Input Volume", "Name of the input volume"),
+    ("Area by Slice", "The area of the segment in each slice of each slice"),
+    ("Mean Density by Slice", "The average density of the segmented area each slice"),
+    ("Standard Deviation of Density by Slice", "The standard deviation of the density of each slice"),
+    ("Min Density by Slice", "The lowest density in the segment of each slice"),
+    ("Max Density by Slice", "The highest density in the segment of each slice"),
+    ("Mean Area", "The mean area of the segment of all slices"),
+    ("Standard Deviation of Area", "The standard deviation of the segmented area of all slices"),
+    ("Min Area", "The area of the smallest segment slice"),
+    ("Max Area", "The area of the largest segment slice"),
+    ("Mean Density", "The average density of the entire segmented volume"),
+    ("Standard Deviation of Density", "The standard deviation of density of the segmented volume"),
+    ("Min Density", "The minimum density of the segmented volume"),
+    ("Max Density", "The maximum density of the segmented volume"),
+]
 
 
 # Performs analysis on cortical bone
@@ -18,8 +42,8 @@ import MusculoskeletalAnalysisCLITools.reader as reader
 # slope, intercept and scale: parameters of the equation for converting image values to mgHA/ccm
 # output: The name of the output directory
 def main(inputImg, inputMask, voxSize, slope, intercept, name, output):
-    imgData=reader.readImg(inputImg)
-    (_, maskData) = reader.readMask(inputMask)
+    imgData = readImg(inputImg)
+    (_, maskData) = readMask(inputMask)
     (maskData, imgData) = crop(maskData, imgData)
     if np.count_nonzero(maskData) == 0:
          raise Exception("Segmentation mask is empty.")
@@ -61,23 +85,8 @@ def main(inputImg, inputMask, voxSize, slope, intercept, name, output):
 
     fPath = os.path.join(output, "density.txt")
 
-    header = [
-        'Date Analysis Performed',
-        'Input Volume',
-        'Area by Slice',
-        'Mean Density by Slice',
-        'Standard Deviation of Density by Slice',
-        'Min Density by Slice',
-        'Max Density by Slice',
-        'Mean Area',
-        'Standard Deviation of Area',
-        'Min Area',
-        'Max Area',
-        'Mean Density',
-        'Standard Deviation of Density',
-        'Min Density',
-        'Max Density'
-    ]
+    header = [field[0] for field in OUTPUT_FIELDS]
+
     data = [
         date.today(),
         name,

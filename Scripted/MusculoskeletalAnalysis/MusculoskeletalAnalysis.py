@@ -21,7 +21,7 @@ class MusculoskeletalAnalysis(ScriptedLoadableModule):
     def __init__(self, parent):
         ScriptedLoadableModule.__init__(self, parent)
         self.parent.title = "Musculoskeletal Analysis"
-        self.parent.categories = ["Analysis"]  # TODO: set categories (folders where the module shows up in the module selector)
+        self.parent.categories = ["Quantification"]
         self.parent.dependencies = ["CorticalAnalysis", "CancellousAnalysis", "DensityAnalysis"]  # TODO: add here list of module names that this module requires
         self.parent.contributors = ["Joseph Szatkowski (Washington University in St. Louis)"]
         # TODO: update with short description of the module and a link to online module documentation

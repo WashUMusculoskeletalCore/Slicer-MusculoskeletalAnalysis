@@ -3,15 +3,41 @@
 import sys
 import os
 from datetime import date
+
 import numpy as np
-from skimage import measure
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from MusculoskeletalAnalysisCLITools.crop import crop
-from MusculoskeletalAnalysisCLITools.thickness import findSpheres
-from MusculoskeletalAnalysisCLITools.writeReport import writeReport
-import MusculoskeletalAnalysisCLITools.reader as reader
-import MusculoskeletalAnalysisCLITools.shape as shape
-from MusculoskeletalAnalysisCLITools.density import densityMap
+from MusculoskeletalAnalysisCLITools import (
+  crop,
+  bWshape,
+  densityMap,
+  findSpheres,
+  readImg,
+  readMask,
+  updateVertices,
+  writeReport,
+)
+
+
+OUTPUT_FIELDS = [
+    ("Date Analysis Performed", "The current date"),
+    ("Input Volume", "Name of the input volume"),
+    ("Total Volume (mm^3)", "The volume of the segmented area"),
+    ("Bone Volume (mm^3)", "The volume of cancellous bone in the segmented area, calculated using marching cubes"),
+    ("Bone Volume/Total Volume", "The fraction of the volume that is bone"),
+    ("Mean Trabecular Thickness (mm)", "The mean thickess of the bone, measured using largest sphere thickness, in milimeters"),
+    ("Trabecular Thickness Standard Deviation (mm)", "The standard deviation of the mean trabecular thickness"),
+    ("Mean Trabecular Spacing (mm)", "The mean thickness of the non area not containing bone in milimeters, measured using the same method as bone thickness."),
+    ("Trabecular Spacing Standard Deviation (mm)", "The standard deviation of the mean trabecular spacing"),
+    ("Trabecular Number", "Approximated as inverse of trabecular spacing"),
+    ("Structure Model Index", "A measurement of the trabecular shape. 0 is a plate, 3 is a rod, 4 is a sphere"),
+    ("Connectivity Density", "A measurement of the number of connections per volume, based on the Euler characteristic of the bone after removing isolated components and holes"),
+    ("Tissue Mineral Density(mgHA/cm^3)", "The mean density of the bone, measured in miligrams of hydroxyapatite per cubic centimeter"),
+    ("Voxel Dimension (mm)", "The side length of one voxel, measured in milimeters"),
+    ("Lower Threshold", "The lower threshold value for bone"),
+    ("Upper Threshold", "The upper threshold value for bone"),
+]
+
 
 # Performs analysis on cancellous bone
 # image: 3D image black and white of bone
@@ -21,15 +47,17 @@ from MusculoskeletalAnalysisCLITools.density import densityMap
 # slope, intercept and scale: parameters for density conversion
 # output: The name of the output directory
 def main(inputImg, inputMask, lower, upper, voxSize, slope, intercept, name, output):
-    imgData=reader.readImg(inputImg)
-    (_, maskData) = reader.readMask(inputMask)
+    from skimage import measure
 
+    imgData = readImg(inputImg)
+    (_, maskData) = readMask(inputMask)
+    
     (maskData, imgData) = crop(maskData, imgData)
     if np.count_nonzero(maskData) == 0:
          raise Exception("Segmentation mask is empty.")
     trabecular = (imgData > lower) & (imgData <= upper)
     # Create mesh using marching squares and calculate its volume
-    boneMesh = shape.bWshape(trabecular)
+    boneMesh = bWshape(trabecular)
     boneVolume=boneMesh.volume * voxSize**3
     # Find volume of entire mask by counting voxels
     totalVolume = np.count_nonzero(maskData) * voxSize**3
@@ -61,7 +89,7 @@ def main(inputImg, inputMask, lower, upper, voxSize, slope, intercept, name, out
     dr = 0.000001
     # Creates a new mesh by moving each vertex a small distance in the direction of its vertex normal, then find the difference in surface area
     newVert=np.add(boneMesh.vertices, boneMesh.vertex_normals*dr)
-    boneMesh=shape.updateVertices(boneMesh, newVert)
+    boneMesh = updateVertices(boneMesh, newVert)
     dS = (boneMesh.area*(voxSize**2))-bS
     # Convert to mm
     dr = dr*voxSize
@@ -94,24 +122,8 @@ def main(inputImg, inputMask, lower, upper, voxSize, slope, intercept, name, out
 
     fPath = os.path.join(output, "cancellous.txt")
 
-    header = [
-        'Date Analysis Performed',
-        'Input Volume',
-        'Total Volume (mm^3)',
-        'Bone Volume (mm^3)',
-        'Bone Volume/Total Volume',
-        'Mean Trabecular Thickness (mm)',
-        'Trabecular Thickness Standard Deviation (mm)',
-        'Mean Trabecular Spacing (mm)',
-        'Trabecular Spacing Standard Deviation (mm)',
-        'Trabecular Number',
-        'Structure Model Index',
-        'Connectivity Density',
-        'Tissue Mineral Density(mgHA/cm^3)',
-        'Voxel Dimension (mm)',
-        'Lower Threshold',
-        'Upper Threshold'
-    ]
+    header = [field[0] for field in OUTPUT_FIELDS]
+
     data = [
         date.today(),
         name,
