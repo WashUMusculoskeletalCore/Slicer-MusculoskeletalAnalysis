@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>BoneAnalysis</class>
- <widget class="qMRMLWidget" name="BoneAnalysis">
+ <class>MusculoskeletalAnalysis</class>
+ <widget class="qMRMLWidget" name="MusculoskeletalAnalysis">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -88,22 +88,22 @@
         </property>
         <item>
          <property name="text">
-          <string>Cortical</string>
+          <string>Cortical Bone</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Cancellous</string>
+          <string>Cancellous Bone</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Density</string>
+          <string>Bone Density</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Intervertebral</string>
+          <string>Intervertebral Disc</string>
          </property>
         </item>
        </widget>
@@ -392,7 +392,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>BoneAnalysis</sender>
+   <sender>MusculoskeletalAnalysis</sender>
    <signal>mrmlSceneChanged(vtkMRMLScene*)</signal>
    <receiver>inputSelector</receiver>
    <slot>setMRMLScene(vtkMRMLScene*)</slot>
@@ -408,7 +408,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>BoneAnalysis</sender>
+   <sender>MusculoskeletalAnalysis</sender>
    <signal>mrmlSceneChanged(vtkMRMLScene*)</signal>
    <receiver>segmentSelector</receiver>
    <slot>setMRMLScene(vtkMRMLScene*)</slot>
@@ -424,7 +424,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>BoneAnalysis</sender>
+   <sender>MusculoskeletalAnalysis</sender>
    <signal>mrmlSceneChanged(vtkMRMLScene*)</signal>
    <receiver>DICOMSelector</receiver>
    <slot>setMRMLScene(vtkMRMLScene*)</slot>

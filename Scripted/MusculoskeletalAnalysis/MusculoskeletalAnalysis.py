@@ -70,7 +70,7 @@ def registerSampleData():
         # It can be created by Screen Capture module, "Capture all views" option enabled, "Number of images" set to "Single".
         thumbnailFileName=os.path.join(iconsPath, 'Cortical1.png'),
         # Download URL and target file name
-        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/SampleData/CorticalSample1.nrrd?raw=true",
+        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/releases/download/v1.1-assets/CorticalSample1.nrrd",
         fileNames='CorticalSample1.nrrd',
         # Checksum to ensure file integrity. Can be computed by this command:
         #  import hashlib; print(hashlib.sha256(open(filename, "rb").read()).hexdigest())
@@ -88,7 +88,7 @@ def registerSampleData():
         # It can be created by Screen Capture module, "Capture all views" option enabled, "Number of images" set to "Single".
         thumbnailFileName=os.path.join(iconsPath, 'CorticalMask1.png'),
         # Download URL and target file name
-        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/SampleData/CorticalMaskSample1.seg.nrrd?raw=true",
+        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/releases/download/v1.1-assets/CorticalMaskSample1.seg.nrrd",
         fileNames='CorticalMaskSample1.seg.nrrd',
         loadFileType='SegmentationFile',
         # Checksum to ensure file integrity. Can be computed by this command:
@@ -106,7 +106,7 @@ def registerSampleData():
         # It can be created by Screen Capture module, "Capture all views" option enabled, "Number of images" set to "Single".
         thumbnailFileName=os.path.join(iconsPath, 'Cortical2.png'),
         # Download URL and target file name
-        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/SampleData/CorticalSample2.nrrd?raw=true",
+        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/releases/download/v1.1-assets/CorticalSample2.nrrd",
         fileNames='CorticalSample2.nrrd',
         # Checksum to ensure file integrity. Can be computed by this command:
         #  import hashlib; print(hashlib.sha256(open(filename, "rb").read()).hexdigest())
@@ -123,7 +123,7 @@ def registerSampleData():
         # It can be created by Screen Capture module, "Capture all views" option enabled, "Number of images" set to "Single".
         thumbnailFileName=os.path.join(iconsPath, 'CorticalMask2.png'),
         # Download URL and target file name
-        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/SampleData/CorticalMaskSample2.seg.nrrd?raw=true",
+        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/releases/download/v1.1-assets/CorticalMaskSample2.seg.nrrd",
         fileNames='CorticalMaskSample2.seg.nrrd',
         loadFileType='SegmentationFile',
         # Checksum to ensure file integrity. Can be computed by this command:
@@ -139,7 +139,7 @@ def registerSampleData():
         sampleName='Cancellous1',
         thumbnailFileName=os.path.join(iconsPath, 'Cancellous1.png'),
         # Download URL and target file name
-        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/SampleData/CancellousSample1.nrrd?raw=true",
+        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/releases/download/v1.1-assets/CancellousSample1.nrrd",
         fileNames='CancellousSample1.nrrd',
         # Checksum to ensure file integrity. Can be computed by this command:
         #  import hashlib; print(hashlib.sha256(open(filename, "rb").read()).hexdigest())
@@ -155,7 +155,7 @@ def registerSampleData():
         sampleName='CancellousMask1',
         thumbnailFileName=os.path.join(iconsPath, 'CancellousMask1.png'),
         # Download URL and target file name
-        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/SampleData/CancellousMaskSample1.seg.nrrd?raw=true",
+        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/releases/download/v1.1-assets/CancellousMaskSample1.seg.nrrd",
         fileNames='CancellousMaskSample1.seg.nrrd',
         loadFileType='SegmentationFile',
         # Checksum to ensure file integrity. Can be computed by this command:
@@ -171,7 +171,7 @@ def registerSampleData():
         sampleName='Cancellous2',
         thumbnailFileName=os.path.join(iconsPath, 'Cancellous2.png'),
         # Download URL and target file name
-        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/SampleData/CancellousSample2.nrrd?raw=true",
+        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/releases/download/v1.1-assets/CancellousSample2.nrrd",
         fileNames='CancellousSample2.nrrd',
         # Checksum to ensure file integrity. Can be computed by this command:
         #  import hashlib; print(hashlib.sha256(open(filename, "rb").read()).hexdigest())
@@ -187,7 +187,7 @@ def registerSampleData():
         sampleName='CancellousMask2',
         thumbnailFileName=os.path.join(iconsPath, 'CancellousMask2.png'),
         # Download URL and target file name
-        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/SampleData/CancellousMaskSample2.seg.nrrd?raw=true",
+        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/releases/download/v1.1-assets/CancellousMaskSample2.seg.nrrd",
         fileNames='CancellousMaskSample2.seg.nrrd',
         loadFileType='SegmentationFile',
         # Checksum to ensure file integrity. Can be computed by this command:
@@ -203,7 +203,7 @@ def registerSampleData():
         sampleName='Intervertebral1',
         thumbnailFileName=os.path.join(iconsPath, 'Intervertebral1.png'),
         # Download URL and target file name
-        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/SampleData/IntervertebralSample1.nrrd?raw=true",
+        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/releases/download/v1.1-assets/IntervertebralSample1.nrrd",
         fileNames='Intervertebral1.nrrd',
         # Checksum to ensure file integrity. Can be computed by this command:
         #  import hashlib; print(hashlib.sha256(open(filename, "rb").read()).hexdigest())
@@ -219,7 +219,7 @@ def registerSampleData():
         sampleName='IntervertebralMask1',
         thumbnailFileName=os.path.join(iconsPath, 'IntervertebralMask1.png'),
         # Download URL and target file name
-        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/SampleData/IntervertebralMaskSample1.seg.nrrd?raw=true",
+        uris="https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/releases/download/v1.1-assets/IntervertebralMaskSample1.seg.nrrd",
         fileNames='IntervertebralMaskSample1.seg.nrrd',
         loadFileType='SegmentationFile',
         # Checksum to ensure file integrity. Can be computed by this command:

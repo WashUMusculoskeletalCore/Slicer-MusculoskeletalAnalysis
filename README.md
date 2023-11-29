@@ -7,11 +7,14 @@ Musculoskeletal Analysis extension for 3D Slicer.
 </p>
 
 ## How to use
-
-1. Load a DICOM 3D image using the _Add DICOM Data_ module.
-2. Create a segment representing the area to analyze using the Segmentations and Segment Editor modules. See the input parameters of the function for more details on what to include in the segment.
-3. Open the _Musculoskeletal Analysis_ module and select which type of analysis you wish to perform.
-4. Use the Threshold Selector to select the values for bone. Used to seperate bone from pores in cortical analysis and spacing in cancellous analysis.
+1. Load a DICOM 3D image using the Add DICOM Data module.
+2. Create a segment representing the area to analyze using the Segmentations and Segment Editor modules.
+* **Cortical**: Segment should contain the bone including pores, but exclude the medullary cavity.
+* **Cancellous**: Segement should contain cancellous bone and the spacing between bone, but exclude the surrounding cortical bone.
+* **Density**: Segment should contain whatever area you want measured.
+* **Intervertebral**: This function uses two segments, as thresholding alone may not be as effective at cleanly seperating NP from AF. One segment should contain the entire disc, the second should contrain just the Nucleus Pulposus. Order does not matter, as the analysys will identify which is which based on size.
+3. Select which type of analysis you wish to perform.
+4. Use the Threshold Selector to select the values for bone. Used to seperate bone from pores in cortical analysis and spacing in cancellous analysis. Skip this step for intervertebral disc analysis.
 5. (Optional) Use the Advanced tab if the volume is not loaded from a DICOM.
 6. Use the Output Directory Selector to select a directory. Output files will be created in this directory if they do not already exist, or will be appended to if they do.
 
@@ -40,7 +43,7 @@ The program requires information from certain DICOM tags to run. Normally it can
 
 ### Output File
 
-The output file is a`tsv` file named `cortical.txt` with the following columns:
+The output file is a `tsv` file named `cortical.txt` with the following columns:
 
 * **Date Analysis Performed**: The current date
 * **Input Volume**: Name of the input volume
@@ -66,7 +69,7 @@ The output file is a`tsv` file named `cortical.txt` with the following columns:
 
 ### Output File
 
-The output file is a`tsv` file named `cancellous.txt` with the following columns:
+The output file is a `tsv` file named `cancellous.txt` with the following columns:
 
 * **Date Analysis Performed**: The current date
 * **Input Volume**: Name of the input volume
@@ -95,7 +98,7 @@ The output file is a`tsv` file named `cancellous.txt` with the following columns
 
 ### Output File
 
-The output file is a`tsv` file named `density.txt`.
+The output file is a `tsv` file named `density.txt` with the following columns:.
 
 * **Date Analysis Performed**: The current date
 * **Input Volume**: Name of the input volume
@@ -123,7 +126,7 @@ The output file is a`tsv` file named `density.txt`.
 
 ### Output File
 
-The output file is a`tsv` file named `intervertebral.txt` with the following columns:
+The output file is a `tsv` file named `intervertebral.txt` with the following columns:
 
 * **Date Analysis Performed**: The current date
 * **Input Volume**: Name of the input volume
@@ -135,6 +138,55 @@ The output file is a`tsv` file named `intervertebral.txt` with the following col
 * **Disc Height (mm)**: The height of the disc at its center
 * **Disc Height Ratio**: The ratio of disc height to disc width
 * **Voxel Dimension (mm)**: The side length of one voxel, measured in milimeters
+
+## Tutorials:
+
+### Cortical Analysis:
+1. Load Cortical1 and CorticalMask1 from the Sample Data Module.
+2. Open the Musculoskeletal Analysis Module under Quantification.
+3. Set Analysis to "Cortical Bone".
+4. Set Input Volume to Cortical1.
+5. Set Analysis Segment to CorticalMask1 and Segment_1.
+6. Use the sliders to set Threshold to 4000-10000.
+7. Open the Advanced tab and click "Enter DICOM tags manually".
+8. Set values to 0.0073996, 4096, 365.712, -199.725998, and 0.4939.
+9. Click the "..." next to Output Directory to open the directory selection menu, and select a location to save files to.
+10. Click "Apply".
+
+### Cancellous Analysis
+1. Load Cancellous1 and CancellousMask1 from the Sample Data Module.
+2. Open the Musculoskeletal Analysis Module under Quantification.
+3. Set Analysis to "Cancellous Bone".
+4. Set Input Volume to Cancellous1.
+5. Set Analysis Segment to CancellousMask1 and Segment_1.
+6. Use the sliders to set Threshold to 1500-10000.
+7. Open the Advanced tab and click "Enter DICOM tags manually".
+8. Set values to 0.0073996, 4096, 365.712, -199.725998, and 0.4939.
+9. Click the "..." next to Output Directory to open the directory selection menu, and select a location to save files to.
+10. Click "Apply".
+
+### Density Analysis
+1. Load Cancellous1 and CancellousMask1 from the Sample Data Module.
+2. Open the Musculoskeletal Analysis Module under Quantification.
+3. Set Analysis to "Bone Density".
+4. Set Input Volume to Cancellous1.
+5. Set Analysis Segment to CancellousMask1 and Segment_1.
+6. Use the sliders to set Threshold to 1500-10000.
+7. Open the Advanced tab and click "Enter DICOM tags manually".
+8. Set values to 0.0073996, 4096, 365.712, -199.725998, and 0.4939.
+9. Click the "..." next to Output Directory to open the directory selection menu, and select a location to save files to.
+10. Click "Apply".
+
+### Intervertebral Analysis
+1. Load Intervertebral1 and IntervertebralMask1 from the Sample Data Module.
+2. Open the Musculoskeletal Analysis Module under Quantification.
+3. Set Analysis to "Intervertebral Disc".
+4. Set Input Volume to Intervertebral1.
+5. Set Analysis Segment to IntervertebralMask1 and check Segment_1 and Segment_2.
+6. Open the Advanced tab and click "Enter DICOM tags manually".
+7. Set "Voxel Size" to 0.01, leave the other fields blank.
+8. Click the "..." next to Output Directory to open the directory selection menu, and select a location to save files to.
+9. Click "Apply".
 
 ## Python Dependencies
 
