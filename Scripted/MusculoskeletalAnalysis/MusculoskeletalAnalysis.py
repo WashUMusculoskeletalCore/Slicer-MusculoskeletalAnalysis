@@ -22,7 +22,7 @@ class MusculoskeletalAnalysis(ScriptedLoadableModule):
         ScriptedLoadableModule.__init__(self, parent)
         self.parent.title = "Musculoskeletal Analysis"
         self.parent.categories = ["Quantification"]
-        self.parent.dependencies = ["CorticalAnalysis", "CancellousAnalysis", "DensityAnalysis"]  # TODO: add here list of module names that this module requires
+        self.parent.dependencies = ["CorticalAnalysis", "CancellousAnalysis", "DensityAnalysis", "IntervertebralAnalysis"]  # TODO: add here list of module names that this module requires
         self.parent.contributors = ["Joseph Szatkowski (Washington University in St. Louis)"]
         # TODO: update with short description of the module and a link to online module documentation
         self.parent.helpText = """
@@ -525,7 +525,7 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
         self.setNumParameter("0029,1006", str(self.ui.waterDensityLineEdit.text))
         self._parameterNode.SetParameter("OutputDirectory", str(self.ui.outputDirectorySelector.currentPath))
 
-        if self._parameterNode.GetParameter("Analysis") == 'Intervertebral':
+        if self._parameterNode.GetParameter("Analysis") == 'Intervertebral Disc':
             self._parameterNode.SetParameter("MultiSelect", 'True')
         else:
             self._parameterNode.SetParameter("MultiSelect", 'False')
@@ -611,7 +611,7 @@ class MusculoskeletalAnalysisLogic(ScriptedLoadableModuleLogic):
         Initialize parameter node with default settings.
         """
         if not parameterNode.GetParameter("Analysis"):
-            parameterNode.SetParameter("Analysis", "Cortical")
+            parameterNode.SetParameter("Analysis", "Cortical Bone")
 
     def process(self, inputVolume, mask, maskLabel, lowerThreshold, upperThreshold, analysis, outputDirectory, altDICOM=False, DICOMNode=None, manDICOM=False, DICOMOptions=None, source=None, wait=False):
         """
@@ -649,7 +649,7 @@ class MusculoskeletalAnalysisLogic(ScriptedLoadableModuleLogic):
         logging.info('Processing started')
 
         # Get mask segments
-        if analysis == 'Intervertebral':
+        if analysis == 'Intervertebral Disc':
             maskLabel = maskLabel.strip('()')
             labels = maskLabel.split(', ')
             maskID = mask.GetSegmentation().GetSegmentIdBySegmentName(labels[0].strip('\''))
@@ -679,7 +679,7 @@ class MusculoskeletalAnalysisLogic(ScriptedLoadableModuleLogic):
         else:
             dSource = inputVolume
 
-        if analysis != 'Intervertebral':
+        if analysis != 'Intervertebral Disc':
             # Get Density info
             slope=float(self.getDICOMTag(dSource, '0029,1006'))*float(self.getDICOMTag(dSource, '0029,1004'))/1000
             intercept=float(self.getDICOMTag(dSource, '0029,1006'))*float(self.getDICOMTag(dSource, '0029,1004'))+float(self.getDICOMTag(dSource, '0029,1005'))
@@ -687,19 +687,19 @@ class MusculoskeletalAnalysisLogic(ScriptedLoadableModuleLogic):
         voxelSize = self.getDICOMTag(dSource, '0018,0050')
 
         # Prepare parameters for the selected function
-        if analysis == "Cortical":
+        if analysis == "Cortical Bone":
             parameters = {"image":inputVolume, "mask":labelmap, "lowerThreshold":lowerThreshold, "upperThreshold":upperThreshold, "voxelSize":voxelSize, "slope":slope, "intercept":intercept, "inputName":inputVolume.GetName(), "output":outputDirectory}
             module=slicer.modules.corticalanalysis
             requirements = [('scipy', 'scipy'), ('skimage', 'scikit-image'), ('nrrd', 'pynrrd')]
-        elif analysis == "Cancellous":
+        elif analysis == "Cancellous Bone":
             parameters = {"image":inputVolume, "mask":labelmap, "lowerThreshold":lowerThreshold, "upperThreshold":upperThreshold, "voxelSize":voxelSize, "slope":slope, "intercept":intercept, "inputName":inputVolume.GetName(), "output":outputDirectory}
             module=slicer.modules.cancellousanalysis
             requirements = [('scipy', 'scipy'), ('skimage', 'scikit-image'), ('nrrd', 'pynrrd'), ('trimesh', 'trimesh')]
-        elif analysis == "Density":
+        elif analysis == "Bone Density":
             parameters = {"image":inputVolume, "mask":labelmap, "voxelSize":voxelSize, "slope":slope, "intercept":intercept, "inputName":inputVolume.GetName(), "output":outputDirectory}
             module=slicer.modules.densityanalysis
             requirements = [('nrrd', 'pynrrd')]
-        elif analysis == 'Intervertebral':
+        elif analysis == 'Intervertebral Disc':
             parameters = {"image":inputVolume, "mask1":labelmap, "mask2":labelmap2, "voxelSize":voxelSize, "inputName":inputVolume.GetName(), "output":outputDirectory}
             module = slicer.modules.intervertebralanalysis
             requirements = [('scipy', 'scipy'), ('nrrd', 'pynrrd')]
@@ -805,7 +805,7 @@ class MusculoskeletalAnalysisTest(ScriptedLoadableModuleTest):
             maskLabel = "Segment_1"
             lowerThreshold = 4000
             upperThreshold = 10000
-            analysis="Cortical"
+            analysis="Cortical Bone"
             options = {"0018,0050":0.0073996, "0029,1000":4096,"0029,1004":365.712, "0029,1005":-199.725998, "0029,1006":0.4939}
             outputDirectory = os.path.expanduser("~\\Documents\\MusculoskeletalAnalysisTest")
 
@@ -829,14 +829,14 @@ class MusculoskeletalAnalysisTest(ScriptedLoadableModuleTest):
             maskLabel = "Segment_1"
             lowerThreshold = 1500
             upperThreshold = 10000
-            analysis="Cancellous"
+            analysis="Cancellous Bone"
             self.delayDisplay('Loaded test data set')
             # Test cancellous analysis
             logic.process(inputVolume, mask, maskLabel, lowerThreshold, upperThreshold, analysis, outputDirectory, manDICOM=True, DICOMOptions=options, wait=True)
             self.testFile(os.path.join(outputDirectory, "cancellous.txt"), [str(date.today()), "Cancellous1", 1.333489381819056, 0.27016967776411976, 0.20260354634063343, 0.0511667226033897, 0.015690823850909613, 0.163792211301981, 0.0648713764896745, 6.105296412149395, 1.4894811595787207, 365.2072574703726, 589.9998317002252, 0.0073996, 1500.0, 10000.0])
 
             # Reuses cancellous parameters
-            analysis="Density"
+            analysis="Bone Density"
             self.delayDisplay('Loaded test data set')
             # Test density analysis
             logic.process(inputVolume, mask, maskLabel, lowerThreshold, upperThreshold, analysis, outputDirectory, manDICOM=True, DICOMOptions=options, wait=True)
@@ -852,7 +852,7 @@ class MusculoskeletalAnalysisTest(ScriptedLoadableModuleTest):
             maskLabel = "'Segment_1, Segment_2'"
             lowerThreshold = 0
             upperThreshold = 0
-            analysis="Intervertebral"
+            analysis="Intervertebral Disc"
             self.delayDisplay('Loaded test data set')
             # Test cancellous analysis
             logic.process(inputVolume, mask, maskLabel, lowerThreshold, upperThreshold, analysis, outputDirectory, manDICOM=True, DICOMOptions=options, wait=True)
