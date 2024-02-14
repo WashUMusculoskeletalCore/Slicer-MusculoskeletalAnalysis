@@ -182,23 +182,6 @@
       </item>
       <item row="4" column="1">
        <layout class="QFormLayout" name="DICOMForm">
-        <item row="2" column="0">
-         <widget class="QLabel" name="densitySlopeLabel">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="text">
-           <string>Density Slope:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QLineEdit" name="densitySlopeLineEdit">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="0">
          <widget class="QLabel" name="voxelSizeLabel">
           <property name="enabled">
@@ -211,6 +194,40 @@
         </item>
         <item row="0" column="1">
          <widget class="QLineEdit" name="voxelSizeLineEdit">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="scalingLabel">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>µ-Scaling</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="scalingLineEdit">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="densitySlopeLabel">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Density Slope:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLineEdit" name="densitySlopeLineEdit">
           <property name="enabled">
            <bool>false</bool>
           </property>
@@ -234,36 +251,36 @@
          </widget>
         </item>
         <item row="4" column="0">
-         <widget class="QLabel" name="waterDensityLabel">
+         <widget class="QLabel" name="rescaleSlopeLabel">
           <property name="enabled">
            <bool>false</bool>
           </property>
           <property name="text">
-           <string>Water Density</string>
+           <string>Rescale Slope:</string>
           </property>
          </widget>
         </item>
         <item row="4" column="1">
-         <widget class="QLineEdit" name="waterDensityLineEdit">
+         <widget class="QLineEdit" name="rescaleSlopeLineEdit">
           <property name="enabled">
            <bool>false</bool>
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="scalingLabel">
+        <item row="5" column="1">
+         <widget class="QLineEdit" name="rescaleInterceptLineEdit">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="rescaleInterceptLabel">
           <property name="enabled">
            <bool>false</bool>
           </property>
           <property name="text">
-           <string>µ-Scaling</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="scalingLineEdit">
-          <property name="enabled">
-           <bool>false</bool>
+           <string>Rescale Intercept:</string>
           </property>
          </widget>
         </item>

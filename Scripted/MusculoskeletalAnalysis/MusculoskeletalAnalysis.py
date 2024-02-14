@@ -289,7 +289,8 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
         self.ui.scalingLineEdit.connect("editingFinished()", self.updateParameterNodeFromGUI)
         self.ui.densitySlopeLineEdit.connect("editingFinished()", self.updateParameterNodeFromGUI)
         self.ui.densityInterceptLineEdit.connect("editingFinished()", self.updateParameterNodeFromGUI)
-        self.ui.waterDensityLineEdit.connect("editingFinished()", self.updateParameterNodeFromGUI)
+        self.ui.rescaleSlopeLineEdit.connect("editingFinished()", self.updateParameterNodeFromGUI)
+        self.ui.rescaleInterceptLineEdit.connect("editingFinished()", self.updateParameterNodeFromGUI)
         self.ui.outputDirectorySelector.connect("currentPathChanged(const QString)", self.updateParameterNodeFromGUI)
 
         # Buttons
@@ -424,7 +425,8 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
         self.ui.scalingLineEdit.setText(self._parameterNode.GetParameter("0029,1000"))
         self.ui.densitySlopeLineEdit.setText(self._parameterNode.GetParameter("0029,1004"))
         self.ui.densityInterceptLineEdit.setText(self._parameterNode.GetParameter("0029,1005"))
-        self.ui.waterDensityLineEdit.setText(self._parameterNode.GetParameter("0029,1006"))
+        self.ui.rescaleSlopeLineEdit.setText(self._parameterNode.GetParameter("0028,1053"))
+        self.ui.rescaleInterceptLineEdit.setText(self._parameterNode.GetParameter("0028,1052"))
         self.ui.outputDirectorySelector.setCurrentPath(str(self._parameterNode.GetParameter("OutputDirectory")))
 
 
@@ -450,12 +452,14 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
         self.ui.scalingLineEdit.enabled=manual
         self.ui.densitySlopeLineEdit.enabled=manual
         self.ui.densityInterceptLineEdit.enabled=manual
-        self.ui.waterDensityLineEdit.enabled=manual
+        self.ui.rescaleSlopeLineEdit.enabled=manual
+        self.ui.rescaleInterceptLineEdit.enabled=manual
         self.ui.voxelSizeLabel.enabled=manual
         self.ui.scalingLabel.enabled=manual
         self.ui.densitySlopeLabel.enabled=manual
         self.ui.densityInterceptLabel.enabled=manual
-        self.ui.waterDensityLabel.enabled=manual
+        self.ui.rescaleSlopeLabel.enabled=manual
+        self.ui.rescaleInterceptLabel.enabled=manual
         # Update Apply Button
         if self._parameterNode.GetParameter("Analyzing")=="True":
             self.ui.applyButton.toolTip = "Currently running analysis"
@@ -522,7 +526,8 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
         self.setNumParameter("0029,1000", str(self.ui.scalingLineEdit.text))
         self.setNumParameter("0029,1004", str(self.ui.densitySlopeLineEdit.text))
         self.setNumParameter("0029,1005", str(self.ui.densityInterceptLineEdit.text))
-        self.setNumParameter("0029,1006", str(self.ui.waterDensityLineEdit.text))
+        self.setNumParameter("0028,1053", str(self.ui.rescaleSlopeLineEdit.text))
+        self.setNumParameter("0028,1052", str(self.ui.rescaleInterceptLineEdit.text))
         self._parameterNode.SetParameter("OutputDirectory", str(self.ui.outputDirectorySelector.currentPath))
 
         if self._parameterNode.GetParameter("Analysis") == 'Intervertebral Disc':
@@ -553,7 +558,7 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
             self.logic.process(self._parameterNode.GetNodeReference("InputVolume"), self._parameterNode.GetNodeReference("SegmentNode"), self._parameterNode.GetParameter("SegmentID"),
                                self.ui.thresholdSelector.lowerThreshold,  self.ui.thresholdSelector.upperThreshold, self.ui.analysisSelector.currentText, self.ui.outputDirectorySelector.currentPath,
                                self.ui.AlternateDICOMCheckBox.checked, self._parameterNode.GetNodeReference("DICOMNode"), self.ui.ManualDICOMCheckBox.checked,
-                               {'0018,0050':self.ui.voxelSizeLineEdit.text, '0029,1000':self.ui.scalingLineEdit.text, '0029,1004':self.ui.densitySlopeLineEdit.text, '0029,1005':self.ui.densityInterceptLineEdit.text, '0029,1006':self.ui.waterDensityLineEdit.text}, self)
+                               {'0018,0050':self.ui.voxelSizeLineEdit.text, '0029,1000':self.ui.scalingLineEdit.text, '0029,1004':self.ui.densitySlopeLineEdit.text, '0029,1005':self.ui.densityInterceptLineEdit.text, '0028,1053':self.ui.rescaleSlopeLineEdit.text, '0028,1052':self.ui.rescaleInterceptLineEdit.text}, self)
         self.updateGUIFromParameterNode()
 
 
@@ -678,11 +683,11 @@ class MusculoskeletalAnalysisLogic(ScriptedLoadableModuleLogic):
             dSource = DICOMOptions
         else:
             dSource = inputVolume
-
         if analysis != 'Intervertebral Disc':
             # Get Density info
-            slope=float(self.getDICOMTag(dSource, '0029,1006'))*float(self.getDICOMTag(dSource, '0029,1004'))/1000
-            intercept=float(self.getDICOMTag(dSource, '0029,1006'))*float(self.getDICOMTag(dSource, '0029,1004'))+float(self.getDICOMTag(dSource, '0029,1005'))
+            slope=float(self.getDICOMTag(dSource, '0029,1004'))/(float(self.getDICOMTag(dSource, '0029,1000'))*float(self.getDICOMTag(dSource, '0028,1053')))
+            intercept=float(self.getDICOMTag(dSource, '0029,1005'))-(float(self.getDICOMTag(dSource, '0028,1052'))*slope)
+
 
         voxelSize = self.getDICOMTag(dSource, '0018,0050')
 
@@ -806,7 +811,7 @@ class MusculoskeletalAnalysisTest(ScriptedLoadableModuleTest):
             lowerThreshold = 4000
             upperThreshold = 10000
             analysis="Cortical Bone"
-            options = {"0018,0050":0.0073996, "0029,1000":4096,"0029,1004":365.712, "0029,1005":-199.725998, "0029,1006":0.4939}
+            options = {"0018,0050":0.0073996, "0028,1052":-1000, "0028,1053":0.4943119, "0029,1000":4096,"0029,1004":365.712, "0029,1005":-199.725998, }
             outputDirectory = os.path.expanduser("~\\Documents\\MusculoskeletalAnalysisTest")
 
             self.delayDisplay('Loaded test data set')
@@ -817,7 +822,7 @@ class MusculoskeletalAnalysisTest(ScriptedLoadableModuleTest):
 
             # Test cortical analysis
             logic.process(inputVolume, mask, maskLabel, lowerThreshold, upperThreshold, analysis, outputDirectory, manDICOM=True, DICOMOptions=options, wait=True)
-            self.testFile(os.path.join(outputDirectory, "cortical.txt"), [str(date.today()), "Cortical1", 0.22723809679518692, 0.06294702323770145, 1079.7468139192893, 0.09759454038853543, 1.6929074569373408, 0.9198784024224288, 0.773029054514912, 0.48131583996128624, 0.0073996])
+            self.testFile(os.path.join(outputDirectory, "cortical.txt"), [str(date.today()), "Cortical1", 0.21890675924688482, 0.06119903498019812, 1094.0291917644427, 0.08353005741605146, 1.6928001389402272, 0.9198784024224288, 0.7729217365177985, 0.47030180777724473, 0.0073996])
         finally:
             # Clean up nodes
             slicer.mrmlScene.Clear()
@@ -833,7 +838,7 @@ class MusculoskeletalAnalysisTest(ScriptedLoadableModuleTest):
             self.delayDisplay('Loaded test data set')
             # Test cancellous analysis
             logic.process(inputVolume, mask, maskLabel, lowerThreshold, upperThreshold, analysis, outputDirectory, manDICOM=True, DICOMOptions=options, wait=True)
-            self.testFile(os.path.join(outputDirectory, "cancellous.txt"), [str(date.today()), "Cancellous1", 1.333489381819056, 0.27016967776411976, 0.20260354634063343, 0.0511667226033897, 0.015690823850909613, 0.163792211301981, 0.0648713764896745, 6.105296412149395, 1.4894811595787207, 365.2072574703726, 589.9998317002252, 0.0073996, 1500.0, 10000.0])
+            self.testFile(os.path.join(outputDirectory, "cancellous.txt"), [str(date.today()), "Cancellous1", 1.333489381819056, 0.27016967776411976, 0.20260354634063343, 0.05182980579223419, 0.01560752819180971, 0.16437754493704732, 0.06443102087549339, 6.083556001417202, 1.4894811595787207, 365.2072574703726, 589.9998317002252, 0.0073996, 1500.0, 10000.0])
 
             # Reuses cancellous parameters
             analysis="Bone Density"
@@ -856,7 +861,7 @@ class MusculoskeletalAnalysisTest(ScriptedLoadableModuleTest):
             self.delayDisplay('Loaded test data set')
             # Test cancellous analysis
             logic.process(inputVolume, mask, maskLabel, lowerThreshold, upperThreshold, analysis, outputDirectory, manDICOM=True, DICOMOptions=options, wait=True)
-            self.testFile(os.path.join(outputDirectory, "intervertebral.txt"), [str(date.today()), "Intervertebral1", 0.28008754758301957, 0.0694562859207484, 0.24798062791478137, 1.3788097828327734, 1.0306450189585161, 0.1775904, 0.128799782400107, 0.0073996])
+            self.testFile(os.path.join(outputDirectory, "intervertebral.txt"), [str(date.today()), "Intervertebral1", 0.28008754758301957, 0.0694562859207484, 0.24798062791478137, 1.4070918728304844, 1.0306450189585161, 0.1775904, 0.12621094857350137, 0.0073996])
 
         finally:
             # Clean up nodes
