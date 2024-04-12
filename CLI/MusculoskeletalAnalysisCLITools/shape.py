@@ -1,9 +1,9 @@
-def bWshape(shape):
+def bWshape(shape, threshold):
     """Creates a triangular mesh shape using marching cubes algorithm."""
     from skimage import measure
     from trimesh import base
 
-    verts, face, normals, values = measure.marching_cubes(shape)
+    verts, face, normals, _ = measure.marching_cubes(shape, level=threshold, allow_degenerate=False)
     mesh=base.Trimesh(vertices=verts, faces=face, vertex_normals=normals, validate=True)
     return mesh
 

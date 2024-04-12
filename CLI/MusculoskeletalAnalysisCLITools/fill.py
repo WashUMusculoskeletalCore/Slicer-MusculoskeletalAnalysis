@@ -9,11 +9,12 @@ def fill(mask, radius):
     """
     import numpy as np
     import skimage.morphology
-
     # Performs morphological close, filling small gaps
     strel = skimage.morphology.disk(radius, dtype='bool')
+    # Pad image to remove edge related problems
+    mask=np.pad(mask, radius, mode='constant', constant_values=0)
     skimage.morphology.binary_closing(mask, footprint=strel, out=mask)
-
+    mask=mask[radius:-radius, radius:-radius]
     # Fills in all holes not connected to the edges
     seed = np.ones_like(mask, dtype='bool')
 

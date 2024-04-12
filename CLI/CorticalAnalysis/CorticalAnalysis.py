@@ -49,9 +49,6 @@ def main(inputImg, inputMask, lower, upper, voxSize, slope, intercept, name, out
          raise Exception("Segmentation mask is empty.")
     depth = np.shape(maskData)[2] * voxSize
 
-    from scipy.ndimage import distance_transform_edt
-
-
     boneVolume = np.count_nonzero(maskData) * voxSize**3
     # Fill in hole to find medullary cavity
     filledMask = maskData.copy()

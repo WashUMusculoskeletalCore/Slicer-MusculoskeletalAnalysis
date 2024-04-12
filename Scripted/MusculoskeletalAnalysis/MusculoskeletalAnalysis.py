@@ -358,6 +358,7 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
             firstSegmentNode = slicer.mrmlScene.GetFirstNodeByClass("vtkMRMLSegmentationNode")
             if firstSegmentNode:
                 self._parameterNode.SetNodeReferenceID("SegmentNode", firstSegmentNode.GetID())
+                self.ui.segmentSelector.setCurrentNode(firstSegmentNode)
         if not self._parameterNode.GetParameter("SegmentID"):
             if self._parameterNode.GetNodeReference("SegmentNode"):
                 segmentation = self._parameterNode.GetNodeReference("SegmentNode").GetSegmentation()
@@ -509,10 +510,16 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
 
         wasModified = self._parameterNode.StartModify()  # Modify all properties in a single batch
         self._parameterNode.SetNodeReferenceID("InputVolume", self.ui.inputSelector.currentNodeID)
-        if caller == "InputVolume" and event is not None:
-            self._parameterNode.SetNodeReferenceID("InputVolume", event.GetID())
+        if caller == "InputVolume":
+            if event is None:
+                self._parameterNode.SetNodeReferenceID("InputVolume", None)
+            else:
+                self._parameterNode.SetNodeReferenceID("InputVolume", event.GetID())
         elif caller == 'SegmentNode':
-            self._parameterNode.SetNodeReferenceID("SegmentNode", event.GetID())
+            if event is None:
+                self._parameterNode.SetNodeReferenceID("SegmentNode", None)
+            else:
+                self._parameterNode.SetNodeReferenceID("SegmentNode", event.GetID())
         elif caller == 'Segment':
             self._parameterNode.SetParameter("SegmentID", str(event))
         elif caller == 'DICOM' and event is not None:
@@ -580,7 +587,8 @@ class MusculoskeletalAnalysisWidget(ScriptedLoadableModuleWidget, VTKObservation
             stopTime = time.time()
             logging.info(f'Processing completed in {stopTime-startTime:.2f} seconds')
             # Clean up temp nodes
-            slicer.mrmlScene.RemoveNode(self._parameterNode.GetNodeReference("labelMap"))
+            slicer.mrmlScene.RemoveNode(self._parameterNode.GetNodeReference("labelmapNode"))
+            slicer.mrmlScene.RemoveNode(self._parameterNode.GetNodeReference("labelmapNode2"))
             slicer.mrmlScene.RemoveNode(cliNode)
             self._parameterNode.SetParameter("Analyzing", "False")
             self.updateGUIFromParameterNode()
@@ -719,6 +727,8 @@ class MusculoskeletalAnalysisLogic(ScriptedLoadableModuleLogic):
             source.ui.AnalysisProgress.show()
             source._parameterNode.SetParameter("Analyzing", "True")
             source._parameterNode.SetNodeReferenceID("labelmapNode", labelmap.GetID())
+            if 'labelmap2' in locals():
+                source._parameterNode.SetNodeReferenceID("labelmapNode2", labelmap2.GetID())
             source._parameterNode.SetParameter("startTime", str(startTime))
             node.AddObserver('ModifiedEvent', source.analysisUpdate)
         slicer.cli.run(module=module, node=node, wait_for_completion=wait)
@@ -822,7 +832,7 @@ class MusculoskeletalAnalysisTest(ScriptedLoadableModuleTest):
 
             # Test cortical analysis
             logic.process(inputVolume, mask, maskLabel, lowerThreshold, upperThreshold, analysis, outputDirectory, manDICOM=True, DICOMOptions=options, wait=True)
-            self.testFile(os.path.join(outputDirectory, "cortical.txt"), [str(date.today()), "Cortical1", 0.21890675924688482, 0.06119903498019812, 1094.0291917644427, 0.08353005741605146, 1.6928001389402272, 0.9198784024224288, 0.7729217365177985, 0.47030180777724473, 0.0073996])
+            self.testFile(os.path.join(outputDirectory, "cortical.txt"), [str(date.today()), "Cortical1", 0.21890675924688482, 0.06119903498019812, 1094.0291917644427, 0.08353005741605146, 1.6847633350543425, 0.9198784024224288, 0.7648849326319137, 0.47030180777724473, 0.0073996])
         finally:
             # Clean up nodes
             slicer.mrmlScene.Clear()
@@ -838,14 +848,14 @@ class MusculoskeletalAnalysisTest(ScriptedLoadableModuleTest):
             self.delayDisplay('Loaded test data set')
             # Test cancellous analysis
             logic.process(inputVolume, mask, maskLabel, lowerThreshold, upperThreshold, analysis, outputDirectory, manDICOM=True, DICOMOptions=options, wait=True)
-            self.testFile(os.path.join(outputDirectory, "cancellous.txt"), [str(date.today()), "Cancellous1", 1.333489381819056, 0.27016967776411976, 0.20260354634063343, 0.05182980579223419, 0.01560752819180971, 0.16437754493704732, 0.06443102087549339, 6.083556001417202, 1.4894811595787207, 365.2072574703726, 589.9998317002252, 0.0073996, 1500.0, 10000.0])
+            self.testFile(os.path.join(outputDirectory, "cancellous.txt"), [str(date.today()), "Cancellous1", 1.333489381819056, 0.27215499848346064, 0.20409236263449296, 0.05182980579223419, 0.01560752819180971, 0.16437754493704732, 0.06443102087549339, 6.083556001417202, 1.6664854524662474, 365.2072574703726, 589.9997317002255, 0.0073996, 1500.0, 10000.0])
 
             # Reuses cancellous parameters
             analysis="Bone Density"
             self.delayDisplay('Loaded test data set')
             # Test density analysis
             logic.process(inputVolume, mask, maskLabel, lowerThreshold, upperThreshold, analysis, outputDirectory, manDICOM=True, DICOMOptions=options, wait=True)
-            self.testFile(os.path.join(outputDirectory, "density.txt"), ["", "", 2.32469398135312, 147.0087696065838, 309.78804391297064, -255.03709872604347, 1198.6849313585226, "", "", "", "", "", "", "", ""])
+            self.testFile(os.path.join(outputDirectory, "density.txt"), ["", "", 2.32469398135312, 147.00866960658377, 309.78804391297064, -255.03709872604347, 1198.6849313585226, "", "", "", "", "", "", "", ""])
         finally:
             # Clean up nodes
             slicer.mrmlScene.Clear()

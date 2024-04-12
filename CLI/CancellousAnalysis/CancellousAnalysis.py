@@ -57,7 +57,7 @@ def main(inputImg, inputMask, lower, upper, voxSize, slope, intercept, name, out
          raise Exception("Segmentation mask is empty.")
     trabecular = (imgData > lower) & (imgData <= upper)
     # Create mesh using marching squares and calculate its volume
-    boneMesh = bWshape(trabecular)
+    boneMesh = bWshape(imgData, lower)
     boneVolume=boneMesh.volume * voxSize**3
     # Find volume of entire mask by counting voxels
     totalVolume = np.count_nonzero(maskData) * voxSize**3
@@ -84,13 +84,13 @@ def main(inputImg, inputMask, lower, upper, voxSize, slope, intercept, name, out
     # Calculated by finding a 3d mesh, expanding the vertices by a small amount, and calculate a value based on the relative difference in surface area
     # Measures the characteristics of the shape; 0 for plate-like, 3 for rod-like, 4 for sphere-like
     # Surface area
-    bS = boneMesh.area*(voxSize**2)
+    bS = measure.mesh_surface_area(boneMesh.vertices, boneMesh.faces)*(voxSize**2)
     # Arbitrary small value. Reducing size increases accuracy, but risks being rounded to zero
     dr = 0.000001
     # Creates a new mesh by moving each vertex a small distance in the direction of its vertex normal, then find the difference in surface area
     newVert=np.add(boneMesh.vertices, boneMesh.vertex_normals*dr)
     boneMesh = updateVertices(boneMesh, newVert)
-    dS = (boneMesh.area*(voxSize**2))-bS
+    dS = (measure.mesh_surface_area(boneMesh.vertices, boneMesh.faces)*(voxSize**2))-bS
     # Convert to mm
     dr = dr*voxSize
     # Apply the SMI formula
