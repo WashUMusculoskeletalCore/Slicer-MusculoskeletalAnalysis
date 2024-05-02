@@ -5,18 +5,17 @@ project(MusculoskeletalAnalysis)
 #-----------------------------------------------------------------------------
 # Extension meta-information
 set(EXTENSION_HOMEPAGE "https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis")
-set(EXTENSION_CATEGORY "Analysis")
+set(EXTENSION_CATEGORY "Quantification")
 set(EXTENSION_CONTRIBUTORS "Joseph Szatkowski (Washington University in St. Louis)")
-set(EXTENSION_DESCRIPTION "Analyzes 3D musculoskeletal images and generates reports.")
+set(EXTENSION_DESCRIPTION "Analyzes 3D musculoskeletal images and generates 3D musculoskeletal reports including cortical, cancellous, and bone density analysis.")
 set(EXTENSION_STATUS "Alpha")
 set(EXTENSION_ICONURL "https://raw.githubusercontent.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/main/Scripted/MusculoskeletalAnalysis/Resources/Icons/MusculoskeletalAnalysis.png")
-set(EXTENSION_SCREENSHOTURLS "https://github.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/blob/main/Scripted/MusculoskeletalAnalysis/Resources/Icons/Screenshot.png")
+set(EXTENSION_SCREENSHOTURLS "https://raw.githubusercontent.com/WashUMusculoskeletalCore/Slicer-MusculoskeletalAnalysis/main/Scripted/MusculoskeletalAnalysis/Resources/Icons/Screenshot.png")
 
 set(EXTENSION_DEPENDS "NA") # Specified as a list or "NA" if no dependencies
 
 #-----------------------------------------------------------------------------
 # Extension dependencies
-#set(Slicer_DIR "C:/D/S4R/Slicer-build")
 find_package(Slicer REQUIRED)
 include(${Slicer_USE_FILE})
 
